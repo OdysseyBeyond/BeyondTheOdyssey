@@ -1,0 +1,16 @@
+# Untouched upstream clone of the academicpages Jekyll template (67 MB, unused).
+# Not part of this site — delete the folder if you no longer want it locally.
+academicpages.github.io/
+
+# macOS
+.DS_Store
+._*
+
+# scratch
+_diag*.html
+_probe.html
+_d.html
+
+# never deploy unpublished work
+publications.private.js
+*.private.js
