@@ -17,11 +17,15 @@
     var spots = scene.querySelectorAll(".hotspot");
     if (!spots.length) return;
 
-    var tip = document.createElement("div");
-    tip.className = "tip";
-    tip.setAttribute("role", "tooltip");
-    tip.id = "scene-tip";
-    scene.appendChild(tip);
+    // Idempotent: raster mode calls this again after swapping in the artwork.
+    var tip = scene.querySelector(".tip");
+    if (!tip) {
+      tip = document.createElement("div");
+      tip.className = "tip";
+      tip.setAttribute("role", "tooltip");
+      tip.id = "scene-tip";
+      scene.appendChild(tip);
+    }
 
     var hideTimer = null;
 
@@ -65,10 +69,14 @@
     }
 
     spots.forEach(function (spot) {
+      if (spot.dataset.wired) return;      // don't double-bind on re-init
+      spot.dataset.wired = "1";
       var href = spot.getAttribute("data-href");
 
-      spot.setAttribute("tabindex", "0");
-      spot.setAttribute("role", "link");
+      if (spot.tagName !== "A") {
+        spot.setAttribute("tabindex", "0");
+        spot.setAttribute("role", "link");
+      }
       spot.setAttribute("aria-describedby", "scene-tip");
       if (!spot.getAttribute("aria-label")) {
         spot.setAttribute(
@@ -83,11 +91,13 @@
       spot.addEventListener("focus", function () { show(spot); });
       spot.addEventListener("blur", hide);
 
-      function go() { if (href) window.location.href = href; }
-      spot.addEventListener("click", go);
-      spot.addEventListener("keydown", function (e) {
-        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); }
-      });
+      if (spot.tagName !== "A") {
+        var go = function () { if (href) window.location.href = href; };
+        spot.addEventListener("click", go);
+        spot.addEventListener("keydown", function (e) {
+          if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); }
+        });
+      }
     });
 
     window.addEventListener("resize", function () { tip.classList.remove("is-open"); });
@@ -118,6 +128,7 @@
         // them up, so switch to "raster mode": the artwork stays untouched and we
         // lay invisible, fully functional controls exactly over the painted ones.
         scene.classList.add("scene--raster");
+        swapMobileArt(candidates[i]);
         var art = scene.querySelector(".scene__art");
         if (art) art.remove();          // vector scene is redundant now
         buildRasterOverlay(scene);
@@ -131,18 +142,57 @@
 
   /* ---- Raster mode: invisible controls over the painted ones -------------- */
 
-  // Percentages of the 1664x928 artwork. Tune these to your image if it differs.
+  // Measured from assets/hero.png (1536x1024) by locating the painted controls.
   var PAINTED = {
-    search: { left: 29.1, top: 22.6, width: 44.4, height: 7.0 },
+    search: { left: 25.98, top: 20.61, width: 49.54, height: 6.54 },
     nav: [
-      { href: "research.html",     label: "Research",     cx: 34.5 },
-      { href: "publications.html", label: "Publications", cx: 42.7 },
-      { href: "cv.html",           label: "CV",           cx: 50.9 },
-      { href: "teaching.html",     label: "Teaching",     cx: 59.1 },
-      { href: "contact.html",      label: "Contact",      cx: 67.2 }
+      { href: "research.html",     label: "Research",     cx: 33.33 },
+      { href: "publications.html", label: "Publications", cx: 42.48 },
+      { href: "cv.html",           label: "CV",           cx: 51.56 },
+      { href: "teaching.html",     label: "Teaching",     cx: 60.61 },
+      { href: "contact.html",      label: "Contact",      cx: 69.66 }
     ],
-    navTop: 33.9, navSize: 9.4
+    navTop: 30.18, navWidth: 8.0, navHeight: 13.2,
+
+    // Clickable things inside the illustration (percentages of the artwork).
+    objects: [
+      { href: "research.html#threshold-fhe", title: "Threshold FHE",
+        sub: "Distributed decryption & parameters", cta: "Read the research \u2192",
+        left: 17.0, top: 56.0, width: 14.5, height: 13.5 },
+      { href: "research.html#lattices", title: "Lattices & reduction",
+        sub: "LWE \u00b7 SIS \u00b7 Coppersmith \u00b7 Module-LLL", cta: "Read the research \u2192",
+        left: 3.5, top: 71.5, width: 11.0, height: 13.0 },
+      { href: "research.html#number-theory", title: "Algebraic number theory",
+        sub: "Arakelov reduction \u00b7 module lattices", cta: "Read the research \u2192",
+        left: 14.0, top: 75.5, width: 18.0, height: 14.5 },
+      { href: "research.html#cryptanalysis", title: "Cryptanalysis & side channels",
+        sub: "Leakage, faults and what proofs assume", cta: "Read the research \u2192",
+        left: 61.5, top: 44.5, width: 9.0, height: 12.0 },
+      { href: "research.html#lattices", title: "Discrete Gaussian sampling",
+        sub: "Noise, tail bounds & parameter choice", cta: "Read the research \u2192",
+        left: 70.5, top: 61.5, width: 12.5, height: 20.0 },
+      { href: "publications.html", title: "The archive",
+        sub: "Papers, preprints & technical reports", cta: "Go to Publications \u2192",
+        left: 81.5, top: 41.0, width: 11.5, height: 14.0 },
+      { href: "teaching.html", title: "The lecture hall",
+        sub: "Courses & teaching material", cta: "Go to Teaching \u2192",
+        left: 18.0, top: 35.0, width: 7.0, height: 11.5 }
+    ]
   };
+
+  // The mobile layout gets the same illustration, cropped to its lower half.
+  function swapMobileArt(src) {
+    var art = document.querySelector(".home-mobile__art");
+    if (!art) return;
+    // A background box, not an <img>: the illustration is nearly the same aspect
+    // ratio as the slot, so object-fit would show the whole page in miniature.
+    // background-size: 100% auto + bottom anchoring crops to the landscape band.
+    var box = document.createElement("div");
+    box.className = "home-mobile__art home-mobile__art--raster";
+    box.style.backgroundImage = 'url("' + src + '")';
+    box.setAttribute("aria-hidden", "true");
+    art.parentNode.replaceChild(box, art);
+  }
 
   function buildRasterOverlay(scene) {
     var ui = scene.querySelector(".scene__ui");
@@ -174,9 +224,27 @@
       orbit.innerHTML = PAINTED.nav.map(function (n) {
         return '<li><a class="orbit__hit" href="' + n.href + '" aria-label="' + n.label +
                '" style="left:' + n.cx + '%;top:' + PAINTED.navTop +
-               '%;width:' + PAINTED.navSize + '%"></a></li>';
+               '%;width:' + PAINTED.navWidth + '%;height:' + PAINTED.navHeight + '%"></a></li>';
       }).join("");
     }
+
+    // Re-create the clickable illustrated objects over the raster artwork.
+    PAINTED.objects.forEach(function (o) {
+      var a = document.createElement("a");
+      a.className = "obj hotspot";
+      a.href = o.href;
+      a.setAttribute("data-href", o.href);
+      a.setAttribute("data-title", o.title);
+      a.setAttribute("data-sub", o.sub);
+      a.setAttribute("data-cta", o.cta);
+      a.setAttribute("aria-label", o.title + " \u2014 " + o.sub);
+      a.style.left = o.left + "%";
+      a.style.top = o.top + "%";
+      a.style.width = o.width + "%";
+      a.style.height = o.height + "%";
+      ui.appendChild(a);
+    });
+    initHotspots();
   }
 
   document.addEventListener("DOMContentLoaded", function () {

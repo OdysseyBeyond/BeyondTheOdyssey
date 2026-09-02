@@ -145,10 +145,10 @@ code, kbd { font-family: var(--font-mono); font-size: .9em; }
   position: relative;
   /* Never taller than the viewport: keeps the whole scene visible on
      short-and-wide windows instead of forcing a scroll. */
-  width: min(100%, calc(100svh * 1664 / 928));
+  width: min(100%, calc(100svh * 1536 / 1024));
   max-width: 1920px;
   margin: 0 auto;
-  aspect-ratio: 1664 / 928;
+  aspect-ratio: 1536 / 1024;
   overflow: hidden;
   isolation: isolate;
 }
@@ -996,16 +996,57 @@ main.page {
   margin: 0;
   gap: 0;
 }
+/* Hit area covers the painted disc AND its label; the glow stays circular so it
+   sits on the disc rather than boxing the label. */
 .scene--raster .orbit__hit {
   position: absolute;
   transform: translateX(-50%);
+  display: block;
+  border-radius: 12px;
+  transition: transform .22s cubic-bezier(.34, 1.4, .5, 1);
+}
+.scene--raster .orbit__hit::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  width: 74%;
   aspect-ratio: 1;
   border-radius: 50%;
-  display: block;
-  transition: transform .22s cubic-bezier(.34, 1.4, .5, 1), box-shadow .22s ease;
+  transition: box-shadow .22s ease;
 }
 .scene--raster .orbit__hit:hover,
-.scene--raster .orbit__hit:focus-visible {
-  transform: translateX(-50%) translateY(-6px) scale(1.06);
-  box-shadow: 0 10px 26px rgba(46, 24, 84, .4), 0 0 34px rgba(255, 238, 190, .55);
+.scene--raster .orbit__hit:focus-visible { transform: translateX(-50%) translateY(-5px); }
+.scene--raster .orbit__hit:hover::before,
+.scene--raster .orbit__hit:focus-visible::before {
+  box-shadow: 0 10px 26px rgba(46, 24, 84, .4), 0 0 32px rgba(255, 238, 190, .7);
+}
+
+/* Clickable illustrated objects, re-created over the raster artwork. */
+.scene--raster .obj {
+  position: absolute;
+  display: block;
+  border-radius: 14px;
+  transition: transform .26s cubic-bezier(.34, 1.35, .5, 1), box-shadow .26s ease;
+}
+.scene--raster .obj:hover,
+.scene--raster .obj:focus-visible {
+  transform: translateY(-6px);
+  box-shadow: 0 0 0 3px rgba(255, 246, 214, .75), 0 14px 34px rgba(46, 24, 84, .34);
+}
+
+/* Mobile shows the real illustration, cropped to the landscape at its foot.
+   The nav labels end at ~42% of the artwork height, so showing the bottom ~54%
+   keeps the scenery and leaves the painted title and menu out of frame.
+   aspect-ratio 2.78 == width x (1024/1536) x 0.54, so the crop holds at any width. */
+@media (max-width: 820px) {
+  .home-mobile__art--raster {
+    aspect-ratio: 2.78;
+    height: auto;
+    max-height: none;
+    background-size: 100% auto;
+    background-position: center bottom;
+    background-repeat: no-repeat;
+  }
 }
