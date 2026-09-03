@@ -14,3 +14,5 @@ _d.html
 # never deploy unpublished work
 publications.private.js
 *.private.js
+save-hero.sh
+check.sh
