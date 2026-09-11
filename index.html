@@ -3,757 +3,454 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>JeongHwan Lee — Lattice Cryptography &amp; Threshold FHE</title>
-<meta name="description" content="JeongHwan Lee — cryptography researcher at Korea University. Threshold fully homomorphic encryption, lattice reduction, cryptanalysis and algebraic number theory.">
-<meta name="color-scheme" content="light dark">
-<meta property="og:type" content="website">
-<meta property="og:title" content="JeongHwan Lee">
-<meta property="og:description" content="Threshold FHE · Lattice cryptography · Algebraic number theory">
-<link rel="stylesheet" href="assets/site.css">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>">
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "JeongHwan Lee",
-  "jobTitle": "Cryptography Researcher",
-  "affiliation": { "@type": "Organization", "name": "Korea University" },
-  "knowsAbout": ["Threshold Fully Homomorphic Encryption", "Lattice Cryptography",
-                 "Cryptanalysis", "Algebraic Number Theory"]
-}
-</script>
+<title>JeongHwan Lee</title>
+<meta name="description" content="JeongHwan Lee — mathematician working in cryptography at Korea University: quaternions, isogenies, lattices.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+<style>
+  :root {
+    color-scheme: light;
+    --white: #ffffff;
+    --black: #000000;
+    --plate: #f1f1f1;
+    --grey: #545454;
+    --rule: #dcdcdc;
+    --sans: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --math: "Times New Roman", Times, serif;
+    --gutter: clamp(16px, 3vw, 40px);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--white);
+    color: var(--black);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+  :focus-visible { outline: 2px solid var(--black); outline-offset: 3px; }
+  ::selection { background: var(--black); color: var(--white); }
+  i.m { font-family: var(--math); font-style: italic; font-size: 1.08em; }
+  .label { font-size: 12px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; }
+
+  /* ---------- top bar ---------- */
+  .bar {
+    position: sticky; top: 0; z-index: 10;
+    background: var(--white);
+    display: flex; justify-content: space-between; align-items: center; gap: 12px 24px; flex-wrap: wrap;
+    padding-inline: var(--gutter); padding-block: 14px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .bar a { text-decoration: none; }
+  .bar nav { display: flex; flex-wrap: wrap; gap: 6px 24px; }
+  .bar nav a:hover, .bar nav a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
+
+  /* ---------- intro ---------- */
+  .intro { padding-inline: var(--gutter); padding-block: clamp(20px, 3vw, 36px) 0; }
+  .name {
+    margin: 0; font-weight: 900; font-stretch: 112%; line-height: 0.82; letter-spacing: -0.02em;
+    text-transform: uppercase; white-space: nowrap;
+    font-size: 11vw; /* refined by fitText() */
+  }
+  .name .fit { display: inline-block; }
+  .name .mbr { display: none; }
+  @media (max-width: 640px) { .name .mbr { display: inline; } .name .sp { display: none; } }
+
+  .intro-grid {
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 24px clamp(16px, 3vw, 40px);
+    margin-top: clamp(24px, 3.5vw, 48px);
+  }
+  .info { display: flex; flex-direction: column; gap: 28px; padding-bottom: 8px; }
+  .facts { margin: 0; display: grid; gap: 14px; }
+  .facts div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 12px; border-top: 1px solid var(--rule); padding-top: 10px; }
+  .facts dt { margin: 0; }
+  .facts dd { margin: 0; font-size: 16px; font-weight: 500; }
+  .statement { margin: 0; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.45; font-weight: 500; max-width: 34ch; }
+  .cta {
+    align-self: start; display: inline-flex; align-items: center; gap: 14px;
+    background: var(--black); color: var(--white); text-decoration: none;
+    padding: 15px 22px; min-width: 15rem; justify-content: space-between;
+  }
+  .cta:hover { background: #262626; }
+
+  .plate { margin: 0; }
+  .plate .img { position: relative; background: var(--plate); height: min(72vh, 58vw); min-height: 340px; overflow: hidden; }
+  .plate canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+  .plate figcaption { display: flex; justify-content: space-between; gap: 8px 20px; flex-wrap: wrap; padding-top: 10px; }
+  .plate figcaption span:last-child { font-size: 14px; color: var(--grey); }
+  @media (max-width: 860px) {
+    .intro-grid { grid-template-columns: minmax(0, 1fr); }
+    .plate { order: -1; }
+    .plate .img { height: 92vw; max-height: 560px; }
+  }
+
+  /* ---------- sections ---------- */
+  section.block { padding-inline: var(--gutter); padding-block: clamp(72px, 10vw, 128px) 0; }
+  .head { display: flex; justify-content: space-between; align-items: end; gap: 16px 32px; flex-wrap: wrap; margin-bottom: 22px; }
+  h2 { margin: 0; font-size: clamp(40px, 6.4vw, 92px); line-height: 0.86; font-weight: 900; font-stretch: 112%; letter-spacing: -0.02em; text-transform: uppercase; }
+  .count { color: var(--grey); }
+
+  /* research */
+  .fields { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .field {
+    width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer;
+    background: var(--plate); border: 0; padding: 22px 22px 20px;
+    display: flex; flex-direction: column; gap: 10px; min-height: 15rem;
+    transition: background-color 0.18s, color 0.18s;
+  }
+  .field:hover, .field:focus-visible { background: var(--black); color: var(--white); }
+  .field:hover .fdesc, .field:focus-visible .fdesc { color: #cfcfcf; }
+  .ftitle { font-size: clamp(24px, 2.3vw, 32px); line-height: 1; font-weight: 800; font-stretch: 106%; text-transform: uppercase; letter-spacing: -0.01em; }
+  .fdesc { color: var(--grey); font-size: 16px; }
+  .fmeta { margin-top: auto; display: flex; justify-content: space-between; }
+  @media (max-width: 860px) { .fields { grid-template-columns: minmax(0, 1fr); } .field { min-height: 0; } }
+
+  /* papers */
+  .filters { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+  .filters button {
+    font: inherit; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
+    background: none; border: 0; padding: 4px 0; cursor: pointer; color: var(--grey);
+    border-bottom: 2px solid transparent;
+  }
+  .filters button:hover { color: var(--black); }
+  .filters button[aria-pressed="true"] { color: var(--black); border-bottom-color: var(--black); }
+
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 44px 16px; }
+  .tile[hidden] { display: none; }
+  .tile.feature { grid-column: span 2; }
+  .panel {
+    display: flex; flex-direction: column; justify-content: space-between;
+    height: clamp(200px, 17vw, 270px); padding: 16px 16px 14px;
+    background: var(--plate); color: var(--black); text-decoration: none;
+    transition: background-color 0.18s, color 0.18s;
+  }
+  .panel:hover, .panel:focus-visible { background: var(--black); color: var(--white); }
+  .venue { font-size: clamp(28px, 2.8vw, 44px); line-height: 0.9; font-weight: 900; font-stretch: 100%; text-transform: uppercase; letter-spacing: -0.02em; overflow-wrap: anywhere; }
+  .feature .venue { font-size: clamp(40px, 5.4vw, 88px); font-stretch: 112%; }
+  .panel .pfoot { display: flex; justify-content: space-between; align-items: end; gap: 8px; }
+  .tile .title { margin: 14px 0 6px; font-size: 17px; line-height: 1.3; font-weight: 700; }
+  .tile .title a { text-decoration: none; }
+  .tile .title a:hover { text-decoration: underline; text-underline-offset: 3px; }
+  .tile .authors { margin: 0 0 10px; font-size: 15px; color: var(--grey); }
+  .tile .authors b { color: var(--black); font-weight: 700; }
+  .tile .links { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0; }
+  .tile .links a { text-underline-offset: 3px; }
+  .tile .links a:hover { text-decoration-thickness: 2px; }
+  @media (max-width: 1040px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 560px) { .grid { grid-template-columns: minmax(0, 1fr); } .tile.feature { grid-column: auto; } .panel { height: 220px; } }
+
+  /* talks */
+  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--black); }
+  .row { display: grid; grid-template-columns: 9rem minmax(0, 2fr) minmax(0, 1fr); gap: 6px 24px; padding-block: 16px; border-bottom: 1px solid var(--rule); align-items: baseline; }
+  .row .t { font-weight: 700; }
+  .row .where { color: var(--grey); }
+  .row.placeholder { color: #9a9a9a; }
+  .row.placeholder .where { color: #9a9a9a; }
+  @media (max-width: 700px) { .row { grid-template-columns: minmax(0, 1fr); } }
+
+  /* contact */
+  .contact { padding-bottom: clamp(72px, 10vw, 128px); }
+  .mail { display: block; font-weight: 900; font-stretch: 100%; line-height: 1; letter-spacing: -0.03em; text-decoration: none; white-space: nowrap; font-size: 8vw; margin-top: 8px; }
+  .mail .fit { display: inline-block; }
+  .mail:hover { text-decoration: underline; text-decoration-thickness: 0.06em; text-underline-offset: 0.12em; }
+  .elsewhere { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-wrap: wrap; gap: 8px 28px; border-top: 1px solid var(--black); padding-top: 14px; }
+  .elsewhere li:last-child { margin-left: auto; color: var(--grey); }
+
+  footer { background: var(--black); color: var(--white); padding-inline: var(--gutter); padding-block: 32px 40px; }
+  footer .inner { display: flex; justify-content: space-between; align-items: end; gap: 20px 48px; flex-wrap: wrap; }
+  footer p { margin: 0; font-size: 14px; line-height: 1.55; max-width: 70ch; color: #d6d6d6; }
+</style>
 </head>
-<body class="home">
+<body id="top">
 
-<a class="skip-link" href="#nav">Skip to navigation</a>
+<header class="bar">
+  <a class="label" href="#top">JeongHwan Lee</a>
+  <nav class="label" aria-label="Primary">
+    <a href="#research">Research</a>
+    <a href="#papers">Papers</a>
+    <a href="#talks">Talks</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
 
-<!-- ==========================================================================
-     DESKTOP — the illustrated scene
-     Layer 1: SVG art · Layer 2: real HTML UI · Layer 3: clickable objects
-     ========================================================================== -->
-<div class="scene">
+<main>
+  <section class="intro" aria-labelledby="name">
+    <h1 class="name" id="name"><span class="fit">JeongHwan<br class="mbr"><span class="sp"> </span>Lee</span></h1>
 
-  <svg class="scene__art" viewBox="0 0 1664 928" role="img"
-       aria-label="An illustrated landscape: a twilight sky with constellations and mathematical formulas above green hills, a lake, a chalkboard showing a lattice basis, a padlock and key, a notebook of a discrete Gaussian sampler, and stacks of books.">
-    <defs>
-      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%"   stop-color="#5b3f96"/>
-        <stop offset="26%"  stop-color="#7d59b0"/>
-        <stop offset="52%"  stop-color="#a976b8"/>
-        <stop offset="76%"  stop-color="#dda1bc"/>
-        <stop offset="100%" stop-color="#f4c3c0"/>
-      </linearGradient>
-      <linearGradient id="hillFar" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#a8cf6b"/><stop offset="100%" stop-color="#8bbb4f"/>
-      </linearGradient>
-      <linearGradient id="hillMid" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#96c355"/><stop offset="100%" stop-color="#77a63a"/>
-      </linearGradient>
-      <linearGradient id="hillNear" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#8bbd4b"/><stop offset="100%" stop-color="#6b9a31"/>
-      </linearGradient>
-      <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#8ecdf0"/><stop offset="55%" stop-color="#63a8de"/>
-        <stop offset="100%" stop-color="#4e8fca"/>
-      </linearGradient>
-      <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-        <stop offset="0%"   stop-color="#fff3c4" stop-opacity=".85"/>
-        <stop offset="70%"  stop-color="#ffe89a" stop-opacity=".25"/>
-        <stop offset="100%" stop-color="#ffe89a" stop-opacity="0"/>
-      </radialGradient>
-      <linearGradient id="paper" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="#fffdf7"/><stop offset="100%" stop-color="#f4e9d6"/>
-      </linearGradient>
-      <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
-        <stop offset="0%" stop-color="#b8a0e6"/><stop offset="100%" stop-color="#7a5cc0"/>
-      </linearGradient>
-      <linearGradient id="trail" x1="1" y1="0" x2="0" y2="1">
-        <stop offset="0%"   stop-color="#ffe9a8" stop-opacity=".9"/>
-        <stop offset="100%" stop-color="#ffe9a8" stop-opacity="0"/>
-      </linearGradient>
-      <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
-        <feGaussianBlur stdDeviation="14"/>
-      </filter>
-    </defs>
-
-    <!-- ================= SKY ================= -->
-    <rect width="1664" height="928" fill="url(#sky)"/>
-
-    <!-- clouds -->
-    <g fill="#f7cbd8" opacity=".38">
-      <ellipse cx="180" cy="300" rx="150" ry="40"/>
-      <ellipse cx="300" cy="330" rx="180" ry="34"/>
-      <ellipse cx="1480" cy="270" rx="170" ry="42"/>
-      <ellipse cx="1330" cy="330" rx="140" ry="30"/>
-      <ellipse cx="820" cy="392" rx="330" ry="34" opacity=".55"/>
-    </g>
-
-    <!-- stars -->
-    <g fill="#fff6d8">
-      <circle cx="120"  cy="60"  r="2.6" class="twinkle" style="animation-delay:.2s"/>
-      <circle cx="410"  cy="42"  r="2"   class="twinkle" style="animation-delay:1.1s"/>
-      <circle cx="640"  cy="70"  r="2.4" class="twinkle" style="animation-delay:2.3s"/>
-      <circle cx="900"  cy="36"  r="1.9" class="twinkle" style="animation-delay:.7s"/>
-      <circle cx="1120" cy="66"  r="2.5" class="twinkle" style="animation-delay:1.8s"/>
-      <circle cx="1290" cy="30"  r="2"   class="twinkle" style="animation-delay:3s"/>
-      <circle cx="1600" cy="180" r="2.4" class="twinkle" style="animation-delay:.5s"/>
-      <circle cx="70"   cy="230" r="2.2" class="twinkle" style="animation-delay:2.6s"/>
-      <circle cx="520"  cy="150" r="1.8" class="twinkle" style="animation-delay:1.4s"/>
-      <circle cx="1440" cy="230" r="2"   class="twinkle" style="animation-delay:2s"/>
-      <circle cx="960"  cy="120" r="1.7" class="twinkle" style="animation-delay:3.4s"/>
-      <circle cx="1180" cy="160" r="1.9" class="twinkle" style="animation-delay:.9s"/>
-    </g>
-    <!-- sparkle stars -->
-    <g fill="#ffe07a">
-      <path d="M330 210 l6 16 16 6 -16 6 -6 16 -6 -16 -16 -6 16 -6z" class="twinkle" style="animation-delay:1.2s"/>
-      <path d="M1245 118 l5 13 13 5 -13 5 -5 13 -5 -13 -13 -5 13 -5z" class="twinkle" style="animation-delay:2.4s"/>
-      <path d="M556 250 l4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4z" class="twinkle" style="animation-delay:.4s"/>
-      <path d="M1524 336 l4 11 11 4 -11 4 -4 11 -4 -11 -11 -4 11 -4z" class="twinkle" style="animation-delay:3.1s"/>
-    </g>
-
-    <!-- constellation (top-left) -->
-    <g stroke="#fff4cf" stroke-width="1.6" opacity=".75" fill="none">
-      <path d="M232 96 L300 62 L372 88 L420 60 L455 108 L398 142 L318 128 Z"/>
-      <path d="M318 128 L300 62"/>
-    </g>
-    <g fill="#ffeeb0">
-      <circle cx="232" cy="96"  r="5"/><circle cx="300" cy="62"  r="6.5"/>
-      <circle cx="372" cy="88"  r="4.5"/><circle cx="420" cy="60" r="5.5"/>
-      <circle cx="455" cy="108" r="4.5"/><circle cx="398" cy="142" r="5"/>
-      <circle cx="318" cy="128" r="4"/>
-    </g>
-
-    <!-- formulas -->
-    <g fill="#fff6ea" font-family="var(--font-math)" font-style="italic" opacity=".92">
-      <text x="46" y="158" font-size="34">ζ(s) =</text>
-      <text x="172" y="120" font-size="17" text-anchor="middle">∞</text>
-      <text x="172" y="164" font-size="44" text-anchor="middle">Σ</text>
-      <text x="172" y="186" font-size="15" text-anchor="middle">n=1</text>
-      <text x="220" y="148" font-size="26" text-anchor="middle">1</text>
-      <line x1="200" y1="158" x2="240" y2="158" stroke="#fff6ea" stroke-width="2"/>
-      <text x="218" y="184" font-size="24" text-anchor="middle">n<tspan font-size="16" dy="-9">s</tspan></text>
-      <text x="1452" y="112" font-size="32">q = e<tspan font-size="21" dy="-14">2πiτ</tspan></text>
-      <text x="1492" y="152" font-size="28">τ ∈ ℍ</text>
-    </g>
-    <!-- swirl -->
-    <path d="M126 218 q28 -20 54 0 q28 20 56 0 q28 -20 54 0" fill="none"
-          stroke="#f5c95f" stroke-width="4" stroke-linecap="round" opacity=".85"/>
-
-    <!-- shooting star -->
-    <g class="shooting-star">
-      <path d="M1456 114 l-104 84" stroke="url(#trail)" stroke-width="6" stroke-linecap="round"/>
-      <circle cx="1460" cy="112" r="7" fill="#fff6d0"/>
-    </g>
-
-    <!-- aeroplane -->
-    <g class="plane">
-      <g transform="translate(1720 300)">
-        <path d="M0 0 l-52 -9 -16 -25 -13 2 4 26 -30 -5 -14 -14 -11 3 8 22 -8 22 11 3 14 -14 30 -5 -4 26 13 2 16 -25z"
-              fill="#f4f7ff" stroke="#c8cfe8" stroke-width="1.5" stroke-linejoin="round"/>
-        <circle cx="-40" cy="0" r="3" fill="#8fb4e0"/><circle cx="-58" cy="0" r="3" fill="#8fb4e0"/>
-      </g>
-      <path d="M1660 306 q-40 12 -80 0 q-40 -12 -80 0 q-40 12 -80 0" fill="none"
-            stroke="#ffffff" stroke-width="3" stroke-dasharray="3 13" stroke-linecap="round" opacity=".6"/>
-    </g>
-
-    <!-- ================= LAND ================= -->
-
-    <!-- far ridge -->
-    <path d="M0 470 q150 -60 330 -40 q180 20 300 -18 q160 -50 340 -14 q170 34 330 -12 q180 -52 364 -6 V928 H0 Z"
-          fill="url(#hillFar)"/>
-    <!-- mid ridge -->
-    <path d="M0 540 q200 -66 420 -30 q220 36 400 -6 q200 -46 420 -8 q220 38 424 -20 V928 H0 Z"
-          fill="url(#hillMid)"/>
-    <!-- near ground -->
-    <path d="M0 606 q240 -58 470 -26 q230 32 380 8 q200 -32 400 -2 q220 34 414 -22 V928 H0 Z"
-          fill="url(#hillNear)"/>
-
-    <!-- sandy path down to the lake -->
-    <path d="M470 606 q40 74 90 118 q40 34 60 78" fill="none" stroke="#e6d3a8"
-          stroke-width="26" stroke-linecap="round" opacity=".9"/>
-    <path d="M1180 592 q-46 78 -96 122 q-40 34 -58 76" fill="none" stroke="#e6d3a8"
-          stroke-width="24" stroke-linecap="round" opacity=".9"/>
-
-    <!-- ========== LAKE ========== -->
-    <path d="M596 700 q54 -84 168 -96 q120 -12 210 22 q96 30 172 6 q78 -24 116 22
-             q40 46 -8 96 q-52 54 -168 74 q-130 22 -276 14 q-146 -8 -216 -46
-             q-70 -38 2 -92 Z"
-          fill="url(#water)"/>
-    <path d="M596 700 q54 -84 168 -96 q120 -12 210 22 q96 30 172 6 q78 -24 116 22"
-          fill="none" stroke="#e6d3a8" stroke-width="9" opacity=".85"/>
-    <!-- ripples -->
-    <g fill="none" stroke="#bfe4fb" stroke-width="4" stroke-linecap="round" opacity=".8">
-      <path d="M700 780 q16 -10 32 0 q16 10 32 0"/>
-      <path d="M980 810 q16 -10 32 0 q16 10 32 0"/>
-      <path d="M1130 742 q16 -10 32 0 q16 10 32 0"/>
-      <path d="M812 828 q16 -10 32 0 q16 10 32 0"/>
-    </g>
-
-    <!-- whale -->
-    <g class="bob">
-      <path d="M654 776 q10 -46 66 -50 q58 -4 86 26 q22 22 -6 40 q-40 24 -100 16 q-52 -8 -46 -32 Z"
-            fill="#4f6fb5"/>
-      <path d="M660 786 q34 22 96 20 q52 -2 82 -20 q-24 30 -88 32 q-70 2 -90 -32 Z" fill="#9fc0ea"/>
-      <path d="M806 748 q26 -22 44 -6 q-20 4 -30 20 Z" fill="#4f6fb5"/>
-      <circle cx="700" cy="768" r="5" fill="#20305c"/>
-      <path d="M694 736 q4 -26 22 -34 q-6 20 4 32" fill="none" stroke="#bfe4fb" stroke-width="5" stroke-linecap="round"/>
-      <circle cx="722" cy="700" r="6" fill="#bfe4fb" opacity=".85"/>
-    </g>
-
-    <!-- otter -->
-    <g class="bob" style="animation-delay:1.4s">
-      <ellipse cx="906" cy="800" rx="46" ry="24" fill="#7d5aa8"/>
-      <circle cx="880" cy="784" r="20" fill="#8d68b8"/>
-      <circle cx="872" cy="778" r="3.4" fill="#241a44"/><circle cx="888" cy="778" r="3.4" fill="#241a44"/>
-      <ellipse cx="880" cy="789" rx="7" ry="5" fill="#e5c3e0"/>
-      <circle cx="866" cy="768" r="6" fill="#6d4c96"/><circle cx="894" cy="768" r="6" fill="#6d4c96"/>
-      <path d="M948 796 q34 -14 34 -34 q-4 26 -22 40 Z" fill="#7d5aa8"/>
-    </g>
-
-    <!-- fish -->
-    <g>
-      <path d="M760 828 q22 -16 46 0 q-22 16 -46 0 Z" fill="#f08a4b"/>
-      <path d="M760 828 l-14 -10 v20 Z" fill="#f08a4b"/>
-      <path d="M836 856 q20 -14 42 0 q-20 14 -42 0 Z" fill="#f2c14e"/>
-      <path d="M836 856 l-13 -9 v18 Z" fill="#f2c14e"/>
-    </g>
-
-    <!-- sailboat -->
-    <g class="bob" style="animation-delay:.6s">
-      <path d="M772 686 h56 l-12 20 h-32 Z" fill="#6d4c96"/>
-      <path d="M800 622 v58" stroke="#5b3f80" stroke-width="4"/>
-      <path d="M802 626 l30 50 h-30 Z" fill="#f7e6d2"/>
-      <path d="M798 630 l-24 46 h24 Z" fill="#d99ac1"/>
-    </g>
-
-    <!-- ================= LEFT SIDE ================= -->
-
-    <!-- railway -->
-    <path d="M-10 566 q170 -46 356 -20" fill="none" stroke="#8a6a4a" stroke-width="7" opacity=".9"/>
-    <g stroke="#8a6a4a" stroke-width="5" opacity=".75">
-      <path d="M20 552 v22"/><path d="M76 546 v22"/><path d="M132 542 v22"/>
-      <path d="M188 542 v22"/><path d="M244 544 v22"/><path d="M300 548 v22"/>
-    </g>
-    <!-- train -->
-    <g>
-      <g fill="#e9a3c8" stroke="#c97fab" stroke-width="2.5">
-        <rect x="22"  y="500" width="86" height="52" rx="14"/>
-        <rect x="118" y="498" width="82" height="52" rx="14"/>
-        <rect x="210" y="500" width="82" height="52" rx="14"/>
-      </g>
-      <g fill="#fdf0f7">
-        <rect x="36"  y="512" width="26" height="24" rx="8"/><rect x="70" y="512" width="26" height="24" rx="8"/>
-        <rect x="132" y="510" width="26" height="24" rx="8"/><rect x="164" y="510" width="26" height="24" rx="8"/>
-        <rect x="224" y="512" width="26" height="24" rx="8"/><rect x="256" y="512" width="26" height="24" rx="8"/>
-      </g>
-      <!-- cat passengers -->
-      <g fill="#f6d6a8">
-        <circle cx="49" cy="524" r="8"/><circle cx="83" cy="524" r="8"/>
-        <circle cx="145" cy="522" r="8"/><circle cx="177" cy="522" r="8"/>
-        <circle cx="237" cy="524" r="8"/><circle cx="269" cy="524" r="8"/>
-      </g>
-      <g fill="#f6d6a8">
-        <path d="M43 518 l-3 -7 6 3 Z"/><path d="M55 518 l3 -7 -6 3 Z"/>
-        <path d="M77 518 l-3 -7 6 3 Z"/><path d="M89 518 l3 -7 -6 3 Z"/>
-        <path d="M139 516 l-3 -7 6 3 Z"/><path d="M151 516 l3 -7 -6 3 Z"/>
-        <path d="M171 516 l-3 -7 6 3 Z"/><path d="M183 516 l3 -7 -6 3 Z"/>
-        <path d="M231 518 l-3 -7 6 3 Z"/><path d="M243 518 l3 -7 -6 3 Z"/>
-        <path d="M263 518 l-3 -7 6 3 Z"/><path d="M275 518 l3 -7 -6 3 Z"/>
-      </g>
-      <g fill="#5a4a7a">
-        <circle cx="42" cy="556" r="9"/><circle cx="90" cy="556" r="9"/>
-        <circle cx="138" cy="554" r="9"/><circle cx="182" cy="554" r="9"/>
-        <circle cx="230" cy="556" r="9"/><circle cx="274" cy="556" r="9"/>
-      </g>
-    </g>
-
-    <!-- cherry blossom trees -->
-    <g>
-      <rect x="24" y="452" width="9" height="46" rx="4" fill="#8a6a4a"/>
-      <circle cx="28" cy="440" r="30" fill="#f2b6d2"/><circle cx="8" cy="454" r="20" fill="#eea9ca"/>
-      <circle cx="50" cy="452" r="22" fill="#f6c6dc"/>
-      <rect x="330" y="504" width="8" height="40" rx="4" fill="#8a6a4a"/>
-      <circle cx="334" cy="494" r="24" fill="#f2b6d2"/><circle cx="316" cy="506" r="16" fill="#f6c6dc"/>
-    </g>
-
-    <!-- pine trees left -->
-    <g fill="#3f7a3c">
-      <path d="M406 556 l24 -58 24 58 Z"/><path d="M410 578 l20 -50 20 50 Z"/>
-      <rect x="426" y="576" width="8" height="18" rx="3" fill="#8a6a4a"/>
-      <path d="M486 570 l20 -48 20 48 Z"/><path d="M490 588 l16 -42 16 42 Z"/>
-      <rect x="502" y="586" width="7" height="16" rx="3" fill="#8a6a4a"/>
-    </g>
-
-    <!-- castle / clock tower  (Teaching hotspot) -->
-    <g class="hotspot" data-href="teaching.html"
-       data-title="The lecture hall" data-sub="Courses &amp; teaching material" data-cta="Go to Teaching →">
-      <rect class="hotspot__hit" x="112" y="356" width="216" height="160"/>
-      <ellipse class="hotspot__glow" cx="220" cy="440" rx="118" ry="92" fill="url(#glow)" filter="url(#soft)"/>
-      <g class="hotspot__art">
-        <rect x="140" y="416" width="150" height="94" rx="8" fill="#e4e2f4" stroke="#c3bde4" stroke-width="2.5"/>
-        <rect x="176" y="380" width="52" height="130" rx="8" fill="#f0eefb" stroke="#c3bde4" stroke-width="2.5"/>
-        <path d="M170 382 l32 -34 32 34 Z" fill="#6d5bb0"/>
-        <path d="M202 336 v14" stroke="#6d5bb0" stroke-width="3"/>
-        <path d="M204 330 l22 8 -22 8 Z" fill="#f2c14e"/>
-        <circle cx="202" cy="404" r="15" fill="#fffaf0" stroke="#6d5bb0" stroke-width="2.5"/>
-        <path d="M202 404 v-8 M202 404 l6 4" stroke="#4a3d7c" stroke-width="2" stroke-linecap="round"/>
-        <g fill="#8f7ec9">
-          <rect x="152" y="436" width="16" height="24" rx="7"/><rect x="248" y="436" width="16" height="24" rx="7"/>
-          <rect x="152" y="472" width="16" height="24" rx="7"/><rect x="248" y="472" width="16" height="24" rx="7"/>
-        </g>
-        <rect x="192" y="468" width="20" height="42" rx="9" fill="#8f7ec9"/>
-        <path d="M132 418 l8 -14 h150 l8 14 Z" fill="#7f6cbe"/>
-      </g>
-    </g>
-
-    <!-- observatory -->
-    <g>
-      <rect x="352" y="470" width="70" height="44" rx="6" fill="#ded9f0" stroke="#c3bde4" stroke-width="2"/>
-      <path d="M348 472 a39 30 0 0 1 78 0 Z" fill="#9d8fd0"/>
-      <path d="M382 452 l30 -18" stroke="#7f6cbe" stroke-width="6" stroke-linecap="round"/>
-      <rect x="366" y="490" width="14" height="24" rx="6" fill="#8f7ec9"/>
-      <rect x="394" y="490" width="14" height="24" rx="6" fill="#8f7ec9"/>
-    </g>
-
-    <!-- ========== HOTSPOT: chalkboard + rabbit  (Threshold FHE) ========== -->
-    <g class="hotspot" data-href="research.html#threshold-fhe"
-       data-title="Threshold FHE" data-sub="Distributed decryption &amp; parameters" data-cta="Read the research →">
-      <rect class="hotspot__hit" x="168" y="576" width="352" height="184"/>
-      <ellipse class="hotspot__glow" cx="344" cy="668" rx="190" ry="112" fill="url(#glow)" filter="url(#soft)"/>
-      <g class="hotspot__art">
-        <!-- easel legs -->
-        <path d="M292 716 l-16 44 M478 716 l16 44" stroke="#a67c52" stroke-width="9" stroke-linecap="round"/>
-        <!-- board -->
-        <rect x="270" y="588" width="228" height="136" rx="12" fill="#a67c52"/>
-        <rect x="282" y="600" width="204" height="112" rx="7" fill="#2f5c46"/>
-        <!-- L = BZ^n -->
-        <text x="300" y="654" font-family="var(--font-math)" font-style="italic"
-              font-size="31" fill="#f4f7e8">L = BZ<tspan font-size="19" dy="-12">n</tspan></text>
-        <!-- lattice dots on the board -->
-        <g fill="#cfe7b6">
-          <circle cx="426" cy="628" r="3"/><circle cx="450" cy="628" r="3"/><circle cx="474" cy="628" r="3"/>
-          <circle cx="426" cy="652" r="3"/><circle cx="450" cy="652" r="3"/><circle cx="474" cy="652" r="3"/>
-          <circle cx="426" cy="676" r="3"/><circle cx="450" cy="676" r="3"/><circle cx="474" cy="676" r="3"/>
-        </g>
-        <g stroke="#8fbf74" stroke-width="1.2" opacity=".8">
-          <path d="M426 628 h48 M426 652 h48 M426 676 h48"/>
-          <path d="M426 628 v48 M450 628 v48 M474 628 v48"/>
-        </g>
-        <path d="M300 690 h84" stroke="#cfe7b6" stroke-width="3" stroke-linecap="round" opacity=".6"/>
-        <!-- chalk tray -->
-        <rect x="276" y="716" width="216" height="10" rx="5" fill="#8a6540"/>
-        <rect x="300" y="710" width="26" height="7" rx="3.5" fill="#fdf6e6"/>
-        <rect x="334" y="710" width="20" height="7" rx="3.5" fill="#a7d3f2"/>
-        <!-- rabbit professor -->
-        <g>
-          <ellipse cx="222" cy="712" rx="34" ry="42" fill="#b9a7e2"/>
-          <ellipse cx="222" cy="716" rx="21" ry="28" fill="#e8e0fb"/>
-          <circle cx="222" cy="654" r="30" fill="#f3eefe"/>
-          <ellipse cx="208" cy="616" rx="9" ry="26" fill="#f3eefe"/>
-          <ellipse cx="236" cy="616" rx="9" ry="26" fill="#f3eefe"/>
-          <ellipse cx="208" cy="618" rx="4.5" ry="17" fill="#f0bcd4"/>
-          <ellipse cx="236" cy="618" rx="4.5" ry="17" fill="#f0bcd4"/>
-          <circle cx="212" cy="654" r="10" fill="none" stroke="#6d5bb0" stroke-width="2.5"/>
-          <circle cx="234" cy="654" r="10" fill="none" stroke="#6d5bb0" stroke-width="2.5"/>
-          <path d="M222 654 h2" stroke="#6d5bb0" stroke-width="2.5"/>
-          <circle cx="212" cy="654" r="3.4" fill="#2b2350"/><circle cx="234" cy="654" r="3.4" fill="#2b2350"/>
-          <path d="M218 670 q4 5 8 0" stroke="#8a6ea8" stroke-width="2.4" fill="none" stroke-linecap="round"/>
-          <!-- pointer arm -->
-          <path d="M252 700 l40 -28" stroke="#b9a7e2" stroke-width="12" stroke-linecap="round"/>
-          <path d="M288 676 l30 -22" stroke="#6b5230" stroke-width="5" stroke-linecap="round"/>
-        </g>
-      </g>
-    </g>
-
-    <!-- ========== HOTSPOT: lattice graph (Lattices) ========== -->
-    <g class="hotspot" data-href="research.html#lattices"
-       data-title="Lattices &amp; reduction" data-sub="LWE · SIS · Coppersmith · Module-LLL" data-cta="Read the research →">
-      <rect class="hotspot__hit" x="40" y="666" width="150" height="146"/>
-      <ellipse class="hotspot__glow" cx="115" cy="740" rx="98" ry="90" fill="url(#glow)" filter="url(#soft)"/>
-      <g class="hotspot__art">
-        <g stroke="#e8f0d4" stroke-width="2.4" opacity=".95" fill="none">
-          <path d="M62 792 L88 700 L152 726 L126 800 Z"/>
-          <path d="M62 792 L152 726 M88 700 L126 800"/>
-          <path d="M88 700 L166 686 L152 726 M166 686 L126 800"/>
-        </g>
-        <g fill="#f2c14e" stroke="#c99a2e" stroke-width="1.6">
-          <circle cx="62"  cy="792" r="7"/><circle cx="88"  cy="700" r="7"/>
-          <circle cx="152" cy="726" r="7"/><circle cx="126" cy="800" r="7"/>
-          <circle cx="166" cy="686" r="6"/>
-        </g>
-      </g>
-    </g>
-
-    <!-- ========== HOTSPOT: books (Number theory) ========== -->
-    <g class="hotspot" data-href="research.html#number-theory"
-       data-title="Algebraic number theory" data-sub="Arakelov reduction · module lattices" data-cta="Read the research →">
-      <rect class="hotspot__hit" x="286" y="748" width="268" height="116"/>
-      <ellipse class="hotspot__glow" cx="420" cy="806" rx="160" ry="80" fill="url(#glow)" filter="url(#soft)"/>
-      <g class="hotspot__art">
-        <!-- picnic blanket -->
-        <path d="M282 858 h280 l-24 -40 h-232 Z" fill="#f4e7d0" opacity=".55"/>
-        <!-- open book -->
-        <path d="M296 838 q46 -22 92 -4 v-56 q-46 -18 -92 4 Z" fill="url(#paper)" stroke="#d8c8a8" stroke-width="2"/>
-        <path d="M388 834 q46 -18 92 4 v-56 q-46 -22 -92 -4 Z" fill="url(#paper)" stroke="#d8c8a8" stroke-width="2"/>
-        <path d="M388 778 v56" stroke="#c9b898" stroke-width="2.4"/>
-        <g stroke="#b9a9d6" stroke-width="2" stroke-linecap="round" opacity=".8">
-          <path d="M310 800 h56 M310 812 h48 M410 796 h56 M410 808 h44"/>
-        </g>
-        <g fill="#7556b3"><circle cx="330" cy="790" r="3"/><circle cx="348" cy="784" r="3"/><circle cx="364" cy="792" r="3"/></g>
-        <!-- standing book -->
-        <g>
-          <rect x="466" y="754" width="74" height="96" rx="7" fill="#6d5bb0"/>
-          <rect x="474" y="762" width="58" height="80" rx="5" fill="#8f7ec9"/>
-          <text x="503" y="792" text-anchor="middle" font-size="11" font-weight="700" fill="#fff6ff"
-                font-family="var(--font-display)">ALGEBRAIC</text>
-          <text x="503" y="808" text-anchor="middle" font-size="11" font-weight="700" fill="#fff6ff"
-                font-family="var(--font-display)">NUMBER</text>
-          <text x="503" y="824" text-anchor="middle" font-size="11" font-weight="700" fill="#fff6ff"
-                font-family="var(--font-display)">THEORY</text>
-        </g>
-        <!-- pi mug -->
-        <g>
-          <rect x="292" y="846" width="30" height="26" rx="8" fill="#efe6f8" stroke="#c9bce4" stroke-width="2"/>
-          <path d="M322 854 a9 9 0 0 1 0 14" fill="none" stroke="#c9bce4" stroke-width="3"/>
-          <text x="307" y="866" text-anchor="middle" font-size="15" fill="#6d5bb0"
-                font-family="var(--font-math)" font-style="italic">π</text>
-        </g>
-      </g>
-    </g>
-
-    <!-- ================= RIGHT SIDE ================= -->
-
-    <!-- trees right -->
-    <g>
-      <rect x="1258" y="524" width="9" height="34" rx="4" fill="#8a6a4a"/>
-      <circle cx="1262" cy="508" r="28" fill="#5c9c46"/><circle cx="1240" cy="520" r="18" fill="#6cae52"/>
-      <rect x="1596" y="536" width="9" height="34" rx="4" fill="#8a6a4a"/>
-      <circle cx="1600" cy="520" r="26" fill="#5c9c46"/>
-      <path d="M1156 566 l20 -46 20 46 Z" fill="#3f7a3c"/>
-      <rect x="1172" y="564" width="7" height="16" rx="3" fill="#8a6a4a"/>
-    </g>
-
-    <!-- ========== HOTSPOT: padlock + key (Cryptanalysis) ========== -->
-    <g class="hotspot" data-href="research.html#cryptanalysis"
-       data-title="Cryptanalysis &amp; side channels" data-sub="Window leakage · power analysis · faults" data-cta="Read the research →">
-      <rect class="hotspot__hit" x="946" y="424" width="212" height="176"/>
-      <ellipse class="hotspot__glow" cx="1052" cy="512" rx="132" ry="106" fill="url(#glow)" filter="url(#soft)"/>
-      <g class="hotspot__art">
-        <path d="M1022 490 v-24 a30 30 0 0 1 60 0 v24" fill="none" stroke="#8f7ec9" stroke-width="15" stroke-linecap="round"/>
-        <rect x="1002" y="486" width="100" height="84" rx="18" fill="url(#metal)" stroke="#6d5bb0" stroke-width="3"/>
-        <circle cx="1052" cy="518" r="12" fill="#3c2d6b"/>
-        <path d="M1052 526 l-6 22 h12 Z" fill="#3c2d6b"/>
-        <!-- key -->
-        <g transform="rotate(-16 986 588)">
-          <circle cx="964" cy="588" r="15" fill="none" stroke="#f2c14e" stroke-width="8"/>
-          <path d="M979 588 h56" stroke="#f2c14e" stroke-width="8" stroke-linecap="round"/>
-          <path d="M1024 588 v14 M1010 588 v12" stroke="#f2c14e" stroke-width="7" stroke-linecap="round"/>
-        </g>
-      </g>
-    </g>
-
-    <!-- bear reading on a stack of books -->
-    <g>
-      <g>
-        <rect x="1186" y="546" width="76" height="15" rx="5" fill="#5c8fd6"/>
-        <rect x="1192" y="532" width="76" height="15" rx="5" fill="#e0a94f"/>
-        <rect x="1188" y="518" width="76" height="15" rx="5" fill="#cf6f8f"/>
-      </g>
-      <g>
-        <ellipse cx="1226" cy="492" rx="27" ry="26" fill="#a8794f"/>
-        <circle cx="1226" cy="466" r="20" fill="#c08e5e"/>
-        <circle cx="1210" cy="450" r="8" fill="#a8794f"/><circle cx="1242" cy="450" r="8" fill="#a8794f"/>
-        <ellipse cx="1226" cy="472" rx="9" ry="7" fill="#e8d0b4"/>
-        <circle cx="1218" cy="462" r="2.8" fill="#2b2350"/><circle cx="1234" cy="462" r="2.8" fill="#2b2350"/>
-        <circle cx="1226" cy="469" r="2.6" fill="#2b2350"/>
-        <path d="M1198 500 q28 -14 56 0 v22 q-28 -12 -56 0 Z" fill="#3f7a3c" stroke="#2f5c30" stroke-width="2"/>
-        <path d="M1226 500 v22" stroke="#2f5c30" stroke-width="2"/>
-      </g>
-    </g>
-
-    <!-- ========== HOTSPOT: temple + CRYPTO flag (Publications) ========== -->
-    <g class="hotspot" data-href="publications.html"
-       data-title="The archive" data-sub="Papers, preprints &amp; technical reports" data-cta="Go to Publications →">
-      <rect class="hotspot__hit" x="1352" y="404" width="222" height="176"/>
-      <ellipse class="hotspot__glow" cx="1452" cy="500" rx="136" ry="106" fill="url(#glow)" filter="url(#soft)"/>
-      <g class="hotspot__art">
-        <rect x="1378" y="554" width="150" height="16" rx="5" fill="#cfc9e6"/>
-        <path d="M1372 500 h162 l-14 -18 h-134 Z" fill="#e4e0f2"/>
-        <path d="M1382 482 l71 -44 71 44 Z" fill="#b9b0dc"/>
-        <g fill="#f0edfa">
-          <rect x="1392" y="500" width="15" height="54" rx="5"/><rect x="1420" y="500" width="15" height="54" rx="5"/>
-          <rect x="1448" y="500" width="15" height="54" rx="5"/><rect x="1476" y="500" width="15" height="54" rx="5"/>
-          <rect x="1504" y="500" width="15" height="54" rx="5"/>
-        </g>
-        <circle cx="1453" cy="462" r="9" fill="#f2c14e"/>
-        <!-- flag -->
-        <path d="M1548 566 v-102" stroke="#8a8ab0" stroke-width="5" stroke-linecap="round"/>
-        <path d="M1550 466 h62 l-12 20 12 20 h-62 Z" fill="#6d5bb0"/>
-        <text x="1578" y="493" text-anchor="middle" font-size="13" font-weight="700" fill="#fff6ff"
-              font-family="var(--font-display)">CRYPTO</text>
-        <path d="M1568 472 l4 8 8 -8" fill="none" stroke="#f2c14e" stroke-width="2"/>
-      </g>
-    </g>
-
-    <!-- ink bottle + quill: drawn before the notebook so the nib tucks behind it -->
-    <g>
-      <rect x="1132" y="828" width="46" height="44" rx="8" fill="#3c2d6b"/>
-      <rect x="1144" y="816" width="22" height="16" rx="5" fill="#2b1f52"/>
-      <path d="M1162 818 q18 -34 40 -48 q-12 24 -30 52" fill="#f7f0e2" stroke="#d8c8a8" stroke-width="2"/>
-    </g>
-
-    <!-- ========== HOTSPOT: Discrete Gaussian notebook ========== -->
-    <g class="hotspot" data-href="research.html#lattices"
-       data-title="Discrete Gaussian sampling" data-sub="Noise, tail bounds &amp; parameter selection" data-cta="Read the research →">
-      <rect class="hotspot__hit" x="1176" y="616" width="196" height="200"/>
-      <ellipse class="hotspot__glow" cx="1274" cy="716" rx="126" ry="118" fill="url(#glow)" filter="url(#soft)"/>
-      <g class="hotspot__art">
-        <rect x="1196" y="630" width="164" height="176" rx="9" fill="url(#paper)" stroke="#d8c8a8" stroke-width="2.5"/>
-        <g stroke="#c9b898" stroke-width="3" stroke-linecap="round">
-          <path d="M1210 626 v14"/><path d="M1234 626 v14"/><path d="M1258 626 v14"/>
-          <path d="M1282 626 v14"/><path d="M1306 626 v14"/><path d="M1330 626 v14"/>
-        </g>
-        <text x="1278" y="672" text-anchor="middle" font-size="17" font-weight="700" fill="#3c2d6b"
-              font-family="var(--font-display)">Discrete</text>
-        <text x="1278" y="692" text-anchor="middle" font-size="17" font-weight="700" fill="#3c2d6b"
-              font-family="var(--font-display)">Gaussian</text>
-        <text x="1278" y="712" text-anchor="middle" font-size="17" font-weight="700" fill="#3c2d6b"
-              font-family="var(--font-display)">Sampler</text>
-        <!-- bell curve -->
-        <path d="M1214 782 q16 0 26 -10 q14 -14 20 -44 q8 -38 18 -38 q10 0 18 38 q6 30 20 44 q10 10 26 10"
-              fill="none" stroke="#6d5bb0" stroke-width="2.6"/>
-        <path d="M1214 782 h130" stroke="#8a7fb0" stroke-width="2"/>
-        <g fill="#3c2d6b">
-          <circle cx="1240" cy="770" r="2.6"/><circle cx="1258" cy="740" r="2.6"/>
-          <circle cx="1272" cy="706" r="2.6"/><circle cx="1286" cy="700" r="2.6"/>
-          <circle cx="1300" cy="734" r="2.6"/><circle cx="1318" cy="766" r="2.6"/>
-        </g>
-      </g>
-    </g>
-
-    <!-- lattice cube (right) -->
-    <g opacity=".95">
-      <g stroke="#e8f0d4" stroke-width="2.2" fill="none">
-        <path d="M1414 736 L1462 706 L1524 726 L1476 758 Z"/>
-        <path d="M1414 736 L1414 786 M1462 706 L1462 756 M1524 726 L1524 776 M1476 758 L1476 806"/>
-        <path d="M1414 786 L1462 756 L1524 776 L1476 806 Z"/>
-      </g>
-      <g fill="#f2c14e">
-        <circle cx="1414" cy="736" r="5"/><circle cx="1462" cy="706" r="5"/>
-        <circle cx="1524" cy="726" r="5"/><circle cx="1476" cy="758" r="5"/>
-        <circle cx="1414" cy="786" r="5"/><circle cx="1462" cy="756" r="5"/>
-        <circle cx="1524" cy="776" r="5"/><circle cx="1476" cy="806" r="5"/>
-      </g>
-    </g>
-
-    <!-- LATTICES / CRYPTO books -->
-    <g>
-      <rect x="1300" y="820" width="118" height="28" rx="7" fill="#8f7ec9"/>
-      <text x="1359" y="840" text-anchor="middle" font-size="14" font-weight="700" fill="#fff6ff"
-            font-family="var(--font-display)">LATTICES</text>
-      <rect x="1292" y="852" width="126" height="28" rx="7" fill="#d1608f"/>
-      <text x="1355" y="872" text-anchor="middle" font-size="14" font-weight="700" fill="#fff6ff"
-            font-family="var(--font-display)">CRYPTO</text>
-    </g>
-
-    <!-- Hardy quote tablet -->
-    <g>
-      <path d="M1476 828 q0 -34 42 -34 h84 q42 0 42 34 v90 h-168 Z" fill="#efe9dc" stroke="#cfc6b4" stroke-width="2.5"/>
-      <g fill="#5a5270" font-family="var(--font-body)" font-size="13" text-anchor="middle">
-        <text x="1560" y="828">“The infinite is not a</text>
-        <text x="1560" y="846">place we go to, but a</text>
-        <text x="1560" y="864">frontier we approach.”</text>
-        <text x="1560" y="890" font-size="12" font-style="italic">— Hardy</text>
-      </g>
-    </g>
-
-    <!-- foreground flowers -->
-    <g>
-      <g fill="#f2b6d2"><circle cx="600" cy="880" r="5"/><circle cx="612" cy="892" r="5"/><circle cx="588" cy="892" r="5"/></g>
-      <circle cx="600" cy="890" r="4" fill="#f5d98a"/>
-      <g fill="#f6d6ea"><circle cx="1108" cy="888" r="5"/><circle cx="1120" cy="900" r="5"/><circle cx="1096" cy="900" r="5"/></g>
-      <circle cx="1108" cy="898" r="4" fill="#f5d98a"/>
-      <g fill="#f2b6d2"><circle cx="240" cy="896" r="5"/><circle cx="252" cy="908" r="5"/><circle cx="228" cy="908" r="5"/></g>
-    </g>
-  </svg>
-
-  <!-- ==================================================================
-       Layer 2 — real HTML. Sharp on retina, selectable, indexable.
-       ================================================================== -->
-  <div class="scene__ui">
-    <h1 class="wordmark">JeongHwan Lee</h1>
-
-    <p class="tagline">
-      Lattice Cryptography <span>·</span> Threshold FHE <span>·</span> Algebraic Number Theory
-    </p>
-
-    <form class="search" role="search" autocomplete="off">
-      <label class="visually-hidden" for="q">Search this site</label>
-      <div class="search__field">
-        <svg class="search__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
-        </svg>
-        <input class="search__input" id="q" type="search" name="q"
-               placeholder="Explore research, papers, teaching…"
-               role="combobox" aria-expanded="false" aria-controls="results" aria-autocomplete="list">
-        <button class="search__submit" type="submit" aria-label="Search">
-          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <circle cx="11" cy="11" r="6.6" stroke="currentColor" stroke-width="2.3"/>
-            <path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-          </svg>
-        </button>
+    <div class="intro-grid">
+      <div class="info">
+        <dl class="facts">
+          <div><dt class="label">Field</dt><dd>Mathematics of cryptography</dd></div>
+          <div><dt class="label">Affiliation</dt><dd>Korea University, Seoul</dd></div>
+          <div><dt class="label">Topics</dt><dd>Quaternions · Isogenies · Lattices · Implementation security</dd></div>
+        </dl>
+        <!-- 소개문 초안입니다. 자유롭게 고쳐 주세요. -->
+        <p class="statement">I study post-quantum cryptography: the arithmetic behind isogeny- and lattice-based schemes, and what that arithmetic gives away once it runs on real hardware.</p>
+        <a class="cta label" href="#papers"><span>View papers</span><span>7</span></a>
       </div>
-      <div class="results" id="results" role="listbox" aria-label="Search results"></div>
-    </form>
 
-    <ul class="orbit" id="nav">
-      <li>
-        <a class="orbit__link" href="research.html">
-          <span class="orbit__disc" style="--disc:#b49ce4">
-            <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
-              <g stroke="#3c2d6b" stroke-width="1.7">
-                <path d="M11 12 L29 15 L26 29 L9 26 Z M11 12 L26 29 M29 15 L9 26"/>
-              </g>
-              <g fill="#3c2d6b">
-                <circle cx="11" cy="12" r="3"/><circle cx="29" cy="15" r="3"/>
-                <circle cx="26" cy="29" r="3"/><circle cx="9" cy="26" r="3"/>
-              </g>
-            </svg>
-          </span>
-          <span class="orbit__label">Research</span>
-        </a>
-      </li>
-      <li>
-        <a class="orbit__link" href="publications.html">
-          <span class="orbit__disc" style="--disc:#f5cf6a">
-            <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
-              <path d="M12 8h11l6 6v18H12z" fill="#fffaf0" stroke="#8a6a20" stroke-width="1.8" stroke-linejoin="round"/>
-              <path d="M23 8v6h6" stroke="#8a6a20" stroke-width="1.8" stroke-linejoin="round"/>
-              <path d="M16 20h11M16 24h11M16 28h7" stroke="#c99a2e" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          </span>
-          <span class="orbit__label">Publications</span>
-        </a>
-      </li>
-      <li>
-        <a class="orbit__link" href="cv.html">
-          <span class="orbit__disc" style="--disc:#8cc45f">
-            <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
-              <circle cx="20" cy="15" r="6.4" fill="#2f5c30"/>
-              <path d="M8 32c0-6.6 5.4-10 12-10s12 3.4 12 10z" fill="#2f5c30"/>
-            </svg>
-          </span>
-          <span class="orbit__label">CV</span>
-        </a>
-      </li>
-      <li>
-        <a class="orbit__link" href="teaching.html">
-          <span class="orbit__disc" style="--disc:#7cc0e8">
-            <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
-              <rect x="7" y="10" width="26" height="19" rx="2.5" fill="#2f5c46" stroke="#1d4030" stroke-width="1.8"/>
-              <path d="M12 17h7M12 22h11M24 16l2 3 3-5" stroke="#cfe7b6" stroke-width="1.8" stroke-linecap="round"/>
-            </svg>
-          </span>
-          <span class="orbit__label">Teaching</span>
-        </a>
-      </li>
-      <li>
-        <a class="orbit__link" href="contact.html">
-          <span class="orbit__disc" style="--disc:#f4a7c3">
-            <svg viewBox="0 0 40 40" fill="none" aria-hidden="true">
-              <rect x="7" y="12" width="26" height="17" rx="3" fill="#fffaf0" stroke="#a8446f" stroke-width="1.8"/>
-              <path d="M8 14l12 9 12-9" fill="none" stroke="#a8446f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </span>
-          <span class="orbit__label">Contact</span>
-        </a>
-      </li>
-    </ul>
-
-    <p class="scene__footer">© 2025 JeongHwan Lee. All rights reserved.</p>
-  </div>
-</div>
-
-<!-- ==========================================================================
-     MOBILE — a separate composition (the scene does not survive being shrunk)
-     ========================================================================== -->
-<div class="home-mobile">
-  <h1 class="wordmark">JeongHwan Lee</h1>
-  <p class="tagline">Lattice Cryptography<span>·</span>Threshold FHE<span>·</span>Algebraic Number Theory</p>
-
-  <form class="search" role="search" autocomplete="off">
-    <label class="visually-hidden" for="qm">Search this site</label>
-    <div class="search__field">
-      <svg class="search__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="11" cy="11" r="6.6" stroke="currentColor" stroke-width="2.3"/>
-        <path d="M16 16l4.5 4.5" stroke="currentColor" stroke-width="2.3" stroke-linecap="round"/>
-      </svg>
-      <input class="search__input" id="qm" type="search" name="q"
-             placeholder="Search research, papers…"
-             role="combobox" aria-expanded="false" aria-controls="results-m" aria-autocomplete="list">
+      <figure class="plate">
+        <div class="img"><canvas id="hopf" aria-hidden="true"></canvas></div>
+        <figcaption>
+          <span class="label">Hopf fibration <i class="m">S</i>³ → <i class="m">S</i>²</span>
+          <span>Fibres {<i class="m">e</i><sup><i class="m">iθ</i></sup><i class="m">q</i>} of unit quaternions <i class="m">q</i> = <i class="m">z</i>₁ + <i class="m">z</i>₂<i class="m">j</i>, projected to ℝ³</span>
+        </figcaption>
+      </figure>
     </div>
-    <div class="results" id="results-m" role="listbox" aria-label="Search results"></div>
-  </form>
+  </section>
 
-  <ul class="orbit">
-    <li><a class="orbit__link" href="research.html">
-      <span class="orbit__disc" style="--disc:#b49ce4"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><g stroke="#3c2d6b" stroke-width="1.7"><path d="M11 12 L29 15 L26 29 L9 26 Z M11 12 L26 29 M29 15 L9 26"/></g><g fill="#3c2d6b"><circle cx="11" cy="12" r="3"/><circle cx="29" cy="15" r="3"/><circle cx="26" cy="29" r="3"/><circle cx="9" cy="26" r="3"/></g></svg></span>
-      <span class="orbit__label">Research</span></a></li>
-    <li><a class="orbit__link" href="publications.html">
-      <span class="orbit__disc" style="--disc:#f5cf6a"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M12 8h11l6 6v18H12z" fill="#fffaf0" stroke="#8a6a20" stroke-width="1.8" stroke-linejoin="round"/><path d="M23 8v6h6" stroke="#8a6a20" stroke-width="1.8" stroke-linejoin="round"/><path d="M16 20h11M16 24h11" stroke="#c99a2e" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-      <span class="orbit__label">Publications</span></a></li>
-    <li><a class="orbit__link" href="cv.html">
-      <span class="orbit__disc" style="--disc:#8cc45f"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="15" r="6.4" fill="#2f5c30"/><path d="M8 32c0-6.6 5.4-10 12-10s12 3.4 12 10z" fill="#2f5c30"/></svg></span>
-      <span class="orbit__label">CV</span></a></li>
-    <li><a class="orbit__link" href="teaching.html">
-      <span class="orbit__disc" style="--disc:#7cc0e8"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="7" y="10" width="26" height="19" rx="2.5" fill="#2f5c46" stroke="#1d4030" stroke-width="1.8"/><path d="M12 17h7M12 22h11M24 16l2 3 3-5" stroke="#cfe7b6" stroke-width="1.8" stroke-linecap="round"/></svg></span>
-      <span class="orbit__label">Teaching</span></a></li>
-    <li><a class="orbit__link" href="contact.html">
-      <span class="orbit__disc" style="--disc:#f4a7c3"><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><rect x="7" y="12" width="26" height="17" rx="3" fill="#fffaf0" stroke="#a8446f" stroke-width="1.8"/><path d="M8 14l12 9 12-9" fill="none" stroke="#a8446f" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-      <span class="orbit__label">Contact</span></a></li>
-  </ul>
+  <section class="block" id="research" aria-labelledby="h-research">
+    <div class="head"><h2 id="h-research">Research</h2><span class="label count">3 areas</span></div>
+    <ul class="fields">
+      <li><button class="field" type="button" data-topic="isogeny">
+        <span class="ftitle">Isogenies &amp; quaternions</span>
+        <span class="fdesc">SQIsign, quaternion arithmetic with explicit worst-case bounds, terSIDH.</span>
+        <span class="fmeta label"><span>3 papers</span><span>View →</span></span>
+      </button></li>
+      <li><button class="field" type="button" data-topic="lattice">
+        <span class="ftitle">Lattices</span>
+        <span class="fdesc">LWE with sparse secrets and side information, fully homomorphic encryption, threshold FHE.</span>
+        <span class="fmeta label"><span>3 papers</span><span>View →</span></span>
+      </button></li>
+      <li><button class="field" type="button" data-topic="impl">
+        <span class="ftitle">Implementation security</span>
+        <span class="fdesc">Fault attacks, simple power analysis, masking, constant-time implementation.</span>
+        <span class="fmeta label"><span>4 papers</span><span>View →</span></span>
+      </button></li>
+    </ul>
+  </section>
 
-  <svg class="home-mobile__art" viewBox="0 0 390 236" preserveAspectRatio="xMidYMax slice" role="presentation" aria-hidden="true">
-    <g fill="#fff6d8" opacity=".9">
-      <circle cx="40" cy="18" r="1.8" class="twinkle"/><circle cx="150" cy="10" r="1.5" class="twinkle" style="animation-delay:1.3s"/>
-      <circle cx="286" cy="22" r="1.8" class="twinkle" style="animation-delay:2.2s"/><circle cx="350" cy="8" r="1.4" class="twinkle" style="animation-delay:.7s"/>
-    </g>
-    <path d="M0 84 q66 -34 134 -12 q68 22 128 -8 q60 -30 128 -2 V236 H0 Z" fill="#a8cf6b"/>
-    <path d="M0 112 q84 -30 176 -6 q92 24 214 -14 V236 H0 Z" fill="#8bbb4f"/>
-    <path d="M0 146 q104 -26 210 -2 q106 24 180 -12 V236 H0 Z" fill="#6b9a31"/>
-    <path d="M112 186 q18 -30 62 -33 q52 -3 84 15 q30 19 -6 32 q-46 17 -106 11 q-54 -6 -34 -25 Z" fill="#63a8de"/>
-    <path d="M112 186 q18 -30 62 -33 q52 -3 84 15" fill="none" stroke="#e6d3a8" stroke-width="4"/>
-    <g class="bob">
-      <path d="M146 196 q5 -20 30 -22 q26 -2 39 12 q10 10 -3 18 q-18 11 -45 7 q-24 -4 -21 -15 Z" fill="#4f6fb5"/>
-      <circle cx="167" cy="192" r="2.4" fill="#20305c"/>
-      <path d="M215 182 q12 -10 20 -3 q-9 2 -14 9 Z" fill="#4f6fb5"/>
-      <path d="M164 178 q2 -12 10 -16 q-3 9 2 15" fill="none" stroke="#bfe4fb" stroke-width="2.6" stroke-linecap="round"/>
-    </g>
-    <g stroke="#e8f0d4" stroke-width="1.8" fill="none"><path d="M24 176 L44 140 L78 152 L58 190 Z M24 176 L78 152 M44 140 L58 190"/></g>
-    <g fill="#f2c14e"><circle cx="24" cy="176" r="4"/><circle cx="44" cy="140" r="4"/><circle cx="78" cy="152" r="4"/><circle cx="58" cy="190" r="4"/></g>
-    <g>
-      <rect x="296" y="150" width="34" height="30" rx="7" fill="#8f7ec9"/>
-      <path d="M306 152 v-8 a7 7 0 0 1 14 0 v8" fill="none" stroke="#b8a0e6" stroke-width="5"/>
-      <circle cx="313" cy="162" r="4" fill="#3c2d6b"/><path d="M313 167 l-3 9h6z" fill="#3c2d6b"/>
-      <circle cx="286" cy="186" r="6" fill="none" stroke="#f2c14e" stroke-width="3.4"/>
-      <path d="M292 186 h22 M310 186 v6" stroke="#f2c14e" stroke-width="3.4" stroke-linecap="round"/>
-    </g>
-    <g>
-      <rect x="336" y="128" width="9" height="20" rx="4" fill="#8a6a4a"/>
-      <circle cx="340" cy="120" r="15" fill="#5c9c46"/><circle cx="328" cy="128" r="10" fill="#6cae52"/>
-      <rect x="66" y="112" width="8" height="18" rx="4" fill="#8a6a4a"/>
-      <circle cx="70" cy="104" r="14" fill="#f2b6d2"/><circle cx="58" cy="112" r="9" fill="#f6c6dc"/>
-    </g>
-    <g><rect x="196" y="206" width="62" height="12" rx="4" fill="#8f7ec9"/>
-       <rect x="204" y="220" width="62" height="12" rx="4" fill="#d1608f"/></g>
-    <g fill="#f2b6d2"><circle cx="128" cy="222" r="3.2"/><circle cx="135" cy="229" r="3.2"/><circle cx="121" cy="229" r="3.2"/></g>
-  </svg>
+  <section class="block" id="papers" aria-labelledby="h-papers">
+    <div class="head">
+      <h2 id="h-papers">Papers</h2>
+      <div class="filters" role="group" aria-label="Filter papers by topic">
+        <button type="button" id="f-all" data-topic="all" aria-pressed="true">All (7)</button>
+        <button type="button" id="f-isogeny" data-topic="isogeny" aria-pressed="false">Isogenies</button>
+        <button type="button" id="f-lattice" data-topic="lattice" aria-pressed="false">Lattices</button>
+        <button type="button" id="f-impl" data-topic="impl" aria-pressed="false">Implementation</button>
+      </div>
+    </div>
 
-  <p class="scene__footer">© 2025 JeongHwan Lee</p>
-</div>
+    <ol class="grid">
+      <li class="tile feature" data-topics="lattice">
+        <a class="panel" href="https://eprint.iacr.org/2026/973" aria-label="CRYPTO 2026 paper on ePrint">
+          <span class="venue">Crypto</span>
+          <span class="pfoot label"><span>Lattices</span><span>2026</span></span>
+        </a>
+        <p class="title"><a href="https://eprint.iacr.org/2026/973">Asynchronous Lagrange-Based Threshold FHE with Smaller Modulus Overhead</a></p>
+        <p class="authors">Won Kim, Changmin Lee, <b>JeongHwan Lee</b>, Alain Passelègue, Damien Stehlé</p>
+        <p class="links label"><a href="https://eprint.iacr.org/2026/973">ePrint 2026/973</a></p>
+      </li>
+      <li class="tile" data-topics="lattice">
+        <a class="panel" href="https://eprint.iacr.org/2026/1081" aria-label="Preprint on ePrint">
+          <span class="venue">Preprint</span>
+          <span class="pfoot label"><span>Lattices</span><span>2026</span></span>
+        </a>
+        <p class="title"><a href="https://eprint.iacr.org/2026/1081">From Perfect to Approximate Hints: Efficient LWE Secret Recovery Leveraging Low Hamming Weight</a></p>
+        <p class="authors">Minki Hhan, Ga Hee Hong, Jiseung Kim, Changmin Lee, <b>JeongHwan Lee</b></p>
+        <p class="links label"><a href="https://eprint.iacr.org/2026/1081">ePrint 2026/1081</a></p>
+      </li>
+      <li class="tile" data-topics="isogeny">
+        <a class="panel" href="https://eprint.iacr.org/2025/1649" aria-label="PKC 2026 paper on ePrint">
+          <span class="venue">PKC</span>
+          <span class="pfoot label"><span>Isogenies</span><span>2026</span></span>
+        </a>
+        <p class="title"><a href="https://eprint.iacr.org/2025/1649">SQIsign with Fixed-Precision Integer Arithmetic</a></p>
+        <p class="authors">Won Kim, <b>JeongHwan Lee</b>, Hyeonhak Kim, Changmin Lee</p>
+        <p class="links label"><a href="https://eprint.iacr.org/2025/1649">ePrint 2025/1649</a><a href="https://link.springer.com/chapter/10.1007/978-3-032-26737-5_1">Springer</a></p>
+      </li>
+      <li class="tile" data-topics="lattice impl">
+        <a class="panel" href="https://tches.iacr.org/index.php/TCHES/article/view/12915" aria-label="TCHES 2026 paper">
+          <span class="venue">TCHES</span>
+          <span class="pfoot label"><span>Lattices / Implementation</span><span>2026</span></span>
+        </a>
+        <p class="title"><a href="https://tches.iacr.org/index.php/TCHES/article/view/12915">Secret Key Recovery of FALCON using Simple Power Analysis in Conditional Calculator</a></p>
+        <p class="authors">GyuSang Kim, <b>JeongHwan Lee</b>, Myeonghoon Lee, Seokhie Hong, HeeSeok Kim</p>
+        <p class="links label"><a href="https://tches.iacr.org/index.php/TCHES/article/view/12915">TCHES 2026 · Issue 2</a></p>
+      </li>
+      <li class="tile" data-topics="impl">
+        <a class="panel" href="https://tches.iacr.org/index.php/TCHES/article/view/12882" aria-label="TCHES 2026 paper">
+          <span class="venue">TCHES</span>
+          <span class="pfoot label"><span>Implementation</span><span>2026</span></span>
+        </a>
+        <p class="title"><a href="https://tches.iacr.org/index.php/TCHES/article/view/12882">ARMOR: First-Order Masking of Activation and ArgMax Gadgets for Side-Channel Resistant Neural Networks</a></p>
+        <p class="authors">Won Geun Shin, HeeSeok Kim, <b>JeongHwan Lee</b>, Sangyun Jung</p>
+        <p class="links label"><a href="https://tches.iacr.org/index.php/TCHES/article/view/12882">TCHES 2026 · Issue 2</a></p>
+      </li>
+      <li class="tile" data-topics="isogeny impl">
+        <a class="panel" href="https://eprint.iacr.org/2025/1563" aria-label="Preprint on ePrint">
+          <span class="venue">Preprint</span>
+          <span class="pfoot label"><span>Isogenies / Implementation</span><span>2025</span></span>
+        </a>
+        <p class="title"><a href="https://eprint.iacr.org/2025/1563">Optimized Constant-Time Implementation of terSIDH</a></p>
+        <p class="authors">Taehun Kang, Donghoe Heo, <b>JeongHwan Lee</b>, Suhri Kim, Changmin Lee</p>
+        <p class="links label"><a href="https://eprint.iacr.org/2025/1563">ePrint 2025/1563</a></p>
+      </li>
+      <li class="tile" data-topics="isogeny impl">
+        <a class="panel" href="https://eprint.iacr.org/2024/581" aria-label="PQCrypto 2024 paper on ePrint">
+          <span class="venue">PQCrypto</span>
+          <span class="pfoot label"><span>Isogenies / Implementation</span><span>2024</span></span>
+        </a>
+        <p class="title"><a href="https://eprint.iacr.org/2024/581">Fault Attack on SQIsign</a></p>
+        <p class="authors"><b>JeongHwan Lee</b>, Donghoe Heo, Hyeonhak Kim, Gyusang Kim, Suhri Kim, HeeSeok Kim, Seokhie Hong</p>
+        <p class="links label"><a href="https://eprint.iacr.org/2024/581">ePrint 2024/581</a><a href="https://doi.org/10.1007/978-3-031-62746-0_3">DOI</a></p>
+      </li>
+    </ol>
+  </section>
 
-<script src="assets/data.js"></script>
-<script src="assets/search.js"></script>
-<script src="assets/scene.js"></script>
+  <section class="block" id="talks" aria-labelledby="h-talks">
+    <div class="head"><h2 id="h-talks">Talks</h2></div>
+    <ol class="rows">
+      <!-- 발표 추가 형식 (placeholder 줄은 지워 주세요):
+      <li class="row">
+        <span class="label">2026.08</span>
+        <span class="t">Talk title</span>
+        <span class="where">Event, City · <a href="#">Slides</a></span>
+      </li>
+      -->
+      <li class="row placeholder">
+        <span class="label">YYYY.MM</span>
+        <span class="t">Talk title</span>
+        <span class="where">Event, City · Slides</span>
+      </li>
+    </ol>
+  </section>
+
+  <section class="block contact" id="contact" aria-labelledby="h-contact">
+    <div class="head"><h2 id="h-contact">Contact</h2></div>
+    <a class="mail" href="mailto:hwani0814@korea.ac.kr"><span class="fit">hwani0814@korea.ac.kr</span></a>
+    <ul class="elsewhere label">
+      <li><a href="https://scholar.google.com/citations?user=zFxC22gAAAAJ&amp;hl=en">Google Scholar</a></li>
+      <!-- <li><a href="https://github.com/USERNAME">GitHub</a></li> -->
+      <!-- <li><a href="https://orcid.org/XXXX-XXXX-XXXX-XXXX">ORCID</a></li> -->
+      <li>Korea University, Seoul</li>
+    </ul>
+  </section>
+</main>
+
+<footer>
+  <div class="inner">
+    <p>The plate at the top shows the Hopf fibration. Write a unit quaternion as <i class="m">q</i> = <i class="m">z</i>₁ + <i class="m">z</i>₂<i class="m">j</i> with |<i class="m">z</i>₁|² + |<i class="m">z</i>₂|² = 1; its fibre is the circle {<i class="m">e</i><sup><i class="m">iθ</i></sup><i class="m">q</i>}. Base points on three latitudes of <i class="m">S</i>² give three nested tori of circles, drawn after stereographic projection to ℝ³.</p>
+    <p class="label">© <span id="yr">2026</span> JeongHwan Lee</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  document.getElementById("yr").textContent = new Date().getFullYear();
+
+  /* ---------- fit display type to its container width ---------- */
+  const fits = [...document.querySelectorAll(".name, .mail")];
+  function fitText() {
+    fits.forEach((el) => {
+      const inner = el.querySelector(".fit");
+      const avail = el.clientWidth;
+      el.style.fontSize = "100px";
+      const w = inner.getBoundingClientRect().width;
+      if (w > 0) el.style.fontSize = Math.floor((100 * avail / w) * 0.995 * 100) / 100 + "px";
+    });
+  }
+  fitText();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitText);
+  window.addEventListener("resize", fitText);
+
+  /* ---------- Hopf fibration, drawn in black on the plate ---------- */
+  const cv = document.getElementById("hopf");
+  const ctx = cv.getContext("2d");
+  const box = cv.parentElement;
+  const still = matchMedia("(prefers-reduced-motion: reduce)");
+
+  // fibre over (eta, phi): z1 = e^{i(t+phi)} sin(eta), z2 = e^{it} cos(eta)
+  const rings = [];
+  [0.78, 1.02, 1.26].forEach((eta, li) => {
+    const m = [20, 26, 20][li];
+    for (let k = 0; k < m; k++) rings.push({ eta, phi: (2 * Math.PI * k) / m, li });
+  });
+
+  let W = 0, H = 0, dpr = 1, running = false, visible = true;
+  let tx = 0, ty = 0, px = 0, py = 0;
+  const t0 = performance.now(), N = 128;
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = box.clientWidth; H = box.clientHeight;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    if (!running) draw(performance.now());
+  }
+
+  function draw(now) {
+    const t = still.matches ? 4 : (now - t0) / 1000 + 4;
+    px += (tx - px) * 0.05; py += (ty - py) * 0.05;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+
+    const cx = W * 0.47, cy = H * 0.5, sc = Math.min(W, H) * 0.2;
+    const a4 = 0.35 * Math.sin(t * 0.07);
+    const ry = t * 0.11 + px * 0.7, rx = 0.55 + py * 0.4;
+    const ca = Math.cos(a4), sa = Math.sin(a4), cyw = Math.cos(ry), syw = Math.sin(ry), cxr = Math.cos(rx), sxr = Math.sin(rx);
+    const reveal = still.matches ? Infinity : (now - t0) / 1000;
+
+    rings.forEach((r, idx) => {
+      const p = Math.max(0, Math.min(1, (reveal - idx * 0.016) / 1.0));
+      if (p === 0) return;
+      ctx.strokeStyle = `rgba(0,0,0,${0.62 - r.li * 0.14})`;
+      ctx.lineWidth = 1.25 - r.li * 0.2;
+      ctx.beginPath();
+      const last = Math.round(N * (1 - Math.pow(1 - p, 3)));
+      let started = false;
+      for (let s = 0; s <= last; s++) {
+        const th = (2 * Math.PI * s) / N;
+        let x1 = Math.sin(r.eta) * Math.cos(th + r.phi), y1 = Math.sin(r.eta) * Math.sin(th + r.phi);
+        let x2 = Math.cos(r.eta) * Math.cos(th), y2 = Math.cos(r.eta) * Math.sin(th);
+        [x1, y2] = [ca * x1 - sa * y2, sa * x1 + ca * y2];      // rotation of S^3
+        const d = 1 - y2;                                        // stereographic projection
+        if (d < 0.02) { started = false; continue; }
+        let X = x1 / d, Y = y1 / d, Z = x2 / d;
+        [X, Z] = [cyw * X + syw * Z, -syw * X + cyw * Z];
+        [Y, Z] = [cxr * Y - sxr * Z, sxr * Y + cxr * Z];
+        const persp = 5 / (5 + Z);
+        const sx = cx + X * sc * persp, sy = cy + Y * sc * persp;
+        if (!started) { ctx.moveTo(sx, sy); started = true; } else ctx.lineTo(sx, sy);
+      }
+      ctx.stroke();
+    });
+  }
+
+  function loop(now) {
+    if (!visible || still.matches) { running = false; return; }
+    draw(now);
+    requestAnimationFrame(loop);
+  }
+  function start() { if (!running && visible && !still.matches) { running = true; requestAnimationFrame(loop); } }
+
+  new IntersectionObserver((e) => { visible = e[0].isIntersecting; start(); }).observe(box);
+  new ResizeObserver(resize).observe(box);
+  window.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse") return;
+    tx = e.clientX / window.innerWidth - 0.5; ty = e.clientY / window.innerHeight - 0.5;
+  }, { passive: true });
+  still.addEventListener("change", () => { resize(); start(); });
+  resize();
+  start();
+
+  /* ---------- filters ---------- */
+  const buttons = [...document.querySelectorAll(".filters button")];
+  const tiles = [...document.querySelectorAll(".tile")];
+  function applyFilter(topic) {
+    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.topic === topic)));
+    tiles.forEach((li) => { li.hidden = topic !== "all" && !li.dataset.topics.split(" ").includes(topic); });
+  }
+  buttons.forEach((b) => b.addEventListener("click", () => applyFilter(b.dataset.topic)));
+  document.querySelectorAll(".field").forEach((f) => f.addEventListener("click", () => {
+    applyFilter(f.dataset.topic);
+    document.getElementById("papers").scrollIntoView({ behavior: still.matches ? "auto" : "smooth" });
+  }));
+})();
+</script>
 </body>
 </html>

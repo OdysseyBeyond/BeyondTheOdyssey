@@ -1,23 +1,14 @@
-# jeonghwanlee — personal homepage
+# jeonghwanlee — homepage
 
-A static site. No build step, no dependencies, no `node_modules`. Open the files,
-edit them, push them.
+One file. No build step, no dependencies, no framework.
 
 ```
 my_homepage/
-├── index.html          # the illustrated scene (desktop) + a separate mobile layout
-├── research.html
-├── publications.html
-├── cv.html
-├── teaching.html
-├── contact.html
-└── assets/
-    ├── site.css        # design tokens + every style
-    ├── data.js         # ← single source of truth: papers, research, CV, teaching
-    ├── render.js       # renders the subpages from data.js
-    ├── search.js       # dependency-free fuzzy search
-    ├── scene.js        # hotspot tooltips + optional raster hero override
-    └── mailto.js       # assembles the email address in JS (anti-scrape)
+├── index.html              the entire site (markup + CSS + JS inline)
+├── check.sh                pre-publish check  (local only, not published)
+├── publications.private.js unpublished work, kept out of the repo
+├── .gitignore
+└── .nojekyll               stops GitHub Pages running Jekyll over it
 ```
 
 ## Run it
@@ -25,87 +16,69 @@ my_homepage/
 ```sh
 cd ~/Desktop/my_homepage
 python3 -m http.server 8000
-# then open http://localhost:8000
 ```
 
-`file://` works too, but use the server — it matches how it will be deployed.
+Then open <http://localhost:8000>.
 
-## Architecture
+## Editing
 
-The homepage is the three-layer structure, not a flat picture:
+Everything is in `index.html`, in source order: `<style>`, then the page, then
+one `<script>`. The parts you will touch:
 
-1. **Layer 1 — art.** An inline SVG scene (`index.html`). Vector, so it is sharp at
-   every resolution and each object is individually addressable.
-2. **Layer 2 — real HTML UI.** The name, the search box and the five circular nav
-   buttons are ordinary DOM, positioned in **percentages** so they track the art at
-   any window size. They stay selectable, focusable and indexable by Google.
-3. **Layer 3 — clickable illustrated objects.** Seven `.hotspot` groups inside the
-   SVG lift on hover, show a tooltip, take keyboard focus and navigate on Enter:
+| What | Where |
+| ---- | ----- |
+| Intro sentence | `<p class="statement">` |
+| Field / Affiliation / Topics | `<dl class="facts">` |
+| Research areas | `<ul class="fields">` — `data-topic` ties a card to the paper filter |
+| Papers | `<ol class="grid">` — one `<li class="tile">` each |
+| Talks | `<ol class="rows">` — a commented-out template sits above the placeholder row |
+| Links | `<ul class="elsewhere">` — GitHub and ORCID are commented out |
 
-   | Object                     | Goes to                        |
-   | -------------------------- | ------------------------------ |
-   | Chalkboard `L = BZⁿ`       | `research.html#threshold-fhe`  |
-   | Lattice graph (bottom left)| `research.html#lattices`       |
-   | Books / picnic             | `research.html#number-theory`  |
-   | Padlock + key              | `research.html#cryptanalysis`  |
-   | Discrete Gaussian notebook | `research.html#lattices`       |
-   | Temple + CRYPTO flag       | `publications.html`            |
-   | Clock tower                | `teaching.html`                |
+**Adding a paper.** Copy a `<li class="tile">` block. `data-topics` takes one or
+more of `isogeny`, `lattice`, `impl` (space separated) and drives the filter
+buttons. Add `class="tile feature"` to make it span two columns with the large
+venue type. Then update the three counts by hand: `All (7)` in the filters, the
+`7` in the "View papers" button, and the per-area counts in the research cards.
 
-Below 820px the scene is replaced wholesale by `.home-mobile` — a separate
-composition, because shrinking a 1664×928 illustration to 390px shows nothing.
+**Only list public work.** Every paper on the page links to a public ePrint,
+TCHES or Springer page. Work that is not public yet lives in
+`publications.private.js`, which is gitignored and never deployed — `check.sh`
+fails if any of it reaches `index.html`.
 
-## Editing content
+## The plate
 
-**Everything lives in `assets/data.js`.** The subpages have no hard-coded content;
-they render from that file, and the search index is built from it too. Add a paper
-to `PUBLICATIONS` and it appears on the publications page, in the topic filters and
-in search, with no other edits.
+The grey panel is the Hopf fibration. A unit quaternion `q = z₁ + z₂j` has fibre
+`{e^{iθ}q}`, a circle in S³; base points on three latitudes of S² give three
+nested tori, drawn after stereographic projection to ℝ³.
 
-### Still to fill in
+Two numbers control how it looks, both in the `draw()` function:
 
-| Where | What |
-| ----- | ---- |
-| `SITE.role` | Your exact title |
-| `SITE.email` | `hwani0814@korea.ac.kr` — change here if you want a different public address |
-| `SITE.links` | Scholar, ORCID, DBLP, GitHub, ePrint. Empty strings are hidden; filled ones appear as cards on Contact |
-| `SITE.links.cvPdf` | Path to a CV PDF. Until set, the download button is removed |
-| `PUBLICATIONS[].venue` + `.status` | Titles and author lists came from your LaTeX sources and are real. Venues and years are **not** claimed — entries show "Under submission" / "Manuscript" until you set `venue` and `status: "published"` |
-| `PUBLICATIONS[].note` | Several read `TODO: confirm author list` — those are papers whose `.tex` still had template authors (Michael Shell, Homer Simpson). They render with a dashed amber badge so they are easy to spot |
-| `PUBLICATIONS[].links` | e.g. `{ ePrint: "https://eprint.iacr.org/2026/123" }` |
-| `CV.education`, `CV.experience`, `CV.service` | Placeholders. `CV.awards` is already filled from your 2025 competition results |
-| `TEACHING` | Empty scaffold — I could not tell from your files which courses you taught versus took, so nothing is asserted |
+- `a4 = 0.22 * Math.sin(t * 0.07)` — rotation of S³. Larger sweeps fibres closer
+  to the projection pole, which throws long spikes across the panel.
+- `if (d < 0.18)` — how close to that pole a point may get before the stroke is
+  broken. Lower lets spikes through; higher cuts visible gaps in the circles.
 
-## Using the original illustration instead of the vector scene
+It honours `prefers-reduced-motion`: a single static frame, no animation loop.
+The loop also stops when the panel scrolls out of view.
 
-Drop the raster at `assets/hero.webp` (or `.png` / `.jpg`). `scene.js` probes for it
-and cross-fades it over the vector scene automatically — no code change. The HTML UI
-and the hotspots stay on top and keep working, but the hotspot coordinates are tuned
-to the vector scene, so nudge them in `index.html` if the compositions differ.
+## Before publishing
 
-To go back to the vector scene, delete the file.
+```sh
+./check.sh
+```
+
+Lists what would be published and fails on unpublished research, mojibake
+(this file has been corrupted by a Latin-1 round-trip before), or dead links.
+`--fast` skips the network check.
 
 ## Deploying
 
-**GitHub Pages** — this is already a plain static site, so:
+GitHub Pages, user site:
 
 ```sh
-git init && git add -A && git commit -m "homepage"
-git branch -M main
-git remote add origin https://github.com/<you>/<you>.github.io.git
-git push -u origin main
+./check.sh && git push -u origin main
 ```
 
-Then Settings → Pages → Deploy from branch → `main` / root.
-
-**Vercel / Netlify / Cloudflare Pages** — drag the folder in, or point it at the repo.
-No build command, output directory `.`.
-
-## Notes
-
-- Dark mode follows the OS on the reading pages; the homepage scene is always twilight.
-- `prefers-reduced-motion` disables the twinkling, the plane and the bobbing whale.
-- `/` from anywhere focuses the search box; `↑ ↓` move through results, `Enter` opens.
-- `cv.html` has a print stylesheet — Cmd-P gives a clean one-column CV.
-- The email is assembled by `mailto.js` at runtime, so it is not sitting in the HTML
-  source for scrapers.
+Repository must be named `<username>.github.io`, then Settings → Pages → deploy
+from `main` / root. Note that a free account only serves Pages from a **public**
+repository.
