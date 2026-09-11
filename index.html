@@ -131,9 +131,10 @@
 
   /* about */
   .statement {
-    font-weight: 300; font-size: clamp(22px, 2.3vw, 30px); line-height: 1.45;
-    max-width: 36ch; margin: 0 0 clamp(48px, 8vh, 80px); text-wrap: pretty;
+    font-weight: 300; font-size: clamp(20px, 2.05vw, 27px); line-height: 1.5;
+    max-width: 46ch; margin: 0 0 clamp(48px, 8vh, 80px); text-wrap: pretty;
   }
+  .statement em { font-style: italic; }
   .interests {
     list-style: none; margin: 0; padding: 0;
     display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px clamp(24px, 4vw, 56px);
@@ -145,16 +146,6 @@
   }
   .interests p { margin: 0; color: var(--soft); font-size: 17px; line-height: 1.55; }
   @media (max-width: 860px) { .interests { grid-template-columns: minmax(0, 1fr); } }
-
-  .carmina {
-    font-weight: 300; font-style: italic;
-    font-size: clamp(16.5px, 1.25vw, 19px); line-height: 1.8; color: var(--soft);
-    max-width: 60ch; text-wrap: pretty;
-    margin: clamp(44px, 7vh, 72px) 0 0;
-    padding-left: clamp(18px, 2.2vw, 34px);
-    border-left: 1px solid var(--rule);
-  }
-  .carmina .roman { font-style: normal; color: var(--ink); }
 
   /* publications */
   .filters { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: -18px 0 44px; }
@@ -259,7 +250,9 @@
     <p class="eyebrow"><span class="ring" aria-hidden="true"></span>Research</p>
     <h2>About</h2>
     <!-- 소개문 초안입니다. 자유롭게 고쳐 주세요. -->
-    <p class="statement">Post-quantum schemes are proved secure on paper and then have to run on a chip. I work on both ends — the arithmetic of isogeny- and lattice-based constructions, and the attacks that recover keys from how that arithmetic executes.</p>
+    <p class="statement">A living anthology of studies and reflections — my voice woven with the wisdom of others, sung together as <em>Carmina Mea</em>.<br>
+    Not mine alone, but shaped by countless minds and timeless words;<br>
+    a work of learning as love, and love as the pursuit of beauty, gathered on this path of thought and art.</p>
     <ul class="interests">
       <li>
         <h3><span class="dot" style="--c: var(--indigo)" aria-hidden="true"></span>Lattices</h3>
@@ -274,9 +267,6 @@
         <p>Fault attacks, simple power analysis, masking, constant-time implementation.</p>
       </li>
     </ul>
-    <p class="carmina">A living anthology of studies and reflections — my voice woven with the wisdom of others, sung together as <span class="roman">Carmina Mea</span>.<br>
-    Not mine alone, but shaped by countless minds and timeless words;<br>
-    a work of learning as love, and love as the pursuit of beauty, gathered on this path of thought and art.</p>
   </section>
 
   <section id="papers">
