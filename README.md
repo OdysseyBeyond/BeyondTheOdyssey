@@ -51,12 +51,10 @@ The grey panel is the Hopf fibration. A unit quaternion `q = z₁ + z₂j` has f
 `{e^{iθ}q}`, a circle in S³; base points on three latitudes of S² give three
 nested tori, drawn after stereographic projection to ℝ³.
 
-Two numbers control how it looks, both in the `draw()` function:
-
-- `a4 = 0.22 * Math.sin(t * 0.07)` — rotation of S³. Larger sweeps fibres closer
-  to the projection pole, which throws long spikes across the panel.
-- `if (d < 0.18)` — how close to that pole a point may get before the stroke is
-  broken. Lower lets spikes through; higher cuts visible gaps in the circles.
+The drawing is exactly as you authored it. If you ever want to tune it, the two
+numbers that matter are both in `draw()`: `a4 = 0.35 * Math.sin(t * 0.07)` is the
+rotation of S³, and `if (d < 0.02)` is how close to the projection pole a point
+may get before the stroke breaks.
 
 It honours `prefers-reduced-motion`: a single static frame, no animation loop.
 The loop also stops when the panel scrolls out of view.

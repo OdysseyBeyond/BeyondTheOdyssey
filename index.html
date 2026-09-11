@@ -165,10 +165,10 @@
   footer p { margin: 0; font-size: 14px; line-height: 1.55; max-width: 70ch; color: #d6d6d6; }
 </style>
 </head>
-<body id="top">
+<body>
 
 <header class="bar">
-  <a class="label" href="#top">JeongHwan Lee</a>
+  <a class="label" href="#top" id="top">JeongHwan Lee</a>
   <nav class="label" aria-label="Primary">
     <a href="#research">Research</a>
     <a href="#papers">Papers</a>
@@ -390,7 +390,7 @@
     ctx.clearRect(0, 0, W, H);
 
     const cx = W * 0.47, cy = H * 0.5, sc = Math.min(W, H) * 0.2;
-    const a4 = 0.22 * Math.sin(t * 0.07);
+    const a4 = 0.35 * Math.sin(t * 0.07);
     const ry = t * 0.11 + px * 0.7, rx = 0.55 + py * 0.4;
     const ca = Math.cos(a4), sa = Math.sin(a4), cyw = Math.cos(ry), syw = Math.sin(ry), cxr = Math.cos(rx), sxr = Math.sin(rx);
     const reveal = still.matches ? Infinity : (now - t0) / 1000;
@@ -409,7 +409,7 @@
         let x2 = Math.cos(r.eta) * Math.cos(th), y2 = Math.cos(r.eta) * Math.sin(th);
         [x1, y2] = [ca * x1 - sa * y2, sa * x1 + ca * y2];      // rotation of S^3
         const d = 1 - y2;                                        // stereographic projection
-        if (d < 0.18) { started = false; continue; }
+        if (d < 0.02) { started = false; continue; }
         let X = x1 / d, Y = y1 / d, Z = x2 / d;
         [X, Z] = [cyw * X + syw * Z, -syw * X + cyw * Z];
         [Y, Z] = [cxr * Y - sxr * Z, sxr * Y + cxr * Z];
