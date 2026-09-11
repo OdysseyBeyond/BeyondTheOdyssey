@@ -134,14 +134,9 @@
     font-weight: 300; font-size: clamp(19px, 1.72vw, 24px); line-height: 1.55;
     max-width: 66ch; margin: 0 0 clamp(48px, 8vh, 80px);
   }
-  /* set as verse: each stanza is its own line, and a stanza that has to wrap
-     indents its continuation so the short last line reads as an ending, not
-     as a stray break. */
-  .statement .ln {
-    display: block;
-    padding-left: 1.15em; text-indent: -1.15em;
-    text-wrap: pretty;
-  }
+  /* each stanza is its own block, separated by space rather than a bare
+     newline; wrapped lines stay flush left. */
+  .statement .ln { display: block; text-wrap: pretty; }
   .statement .ln + .ln { margin-top: 0.42em; }
   .statement em { font-style: italic; }
   .interests {
