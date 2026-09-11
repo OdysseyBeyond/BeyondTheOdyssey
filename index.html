@@ -54,7 +54,7 @@
     -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); }
   .hero > *:not(canvas) { position: relative; }
   nav {
-    display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px 24px;
+    display: flex; justify-content: flex-end; align-items: baseline; flex-wrap: wrap; gap: 12px 24px;
     font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--soft);
   }
   nav .links { display: flex; flex-wrap: wrap; gap: 8px clamp(16px, 2.4vw, 32px); }
@@ -64,8 +64,9 @@
     font-family: var(--display); font-weight: 400;
     font-size: clamp(44px, 10.5vw, 168px); line-height: 0.9; letter-spacing: 0.02em;
     text-transform: uppercase; margin: 0;
+    display: inline-block; text-align: right;
   }
-  h1 .l2 { display: block; padding-left: 1.6em; }
+  h1 .l2 { display: block; }
   .lede {
     font-weight: 300; font-size: clamp(18px, 1.5vw, 21px); line-height: 1.55; color: var(--soft);
     margin: 30px 0 0 0.3em; max-width: 30ch;
@@ -196,7 +197,6 @@
 <header class="hero" id="top">
   <canvas id="hopf" aria-hidden="true"></canvas>
   <nav aria-label="Primary">
-    <a href="#top">J. Lee</a>
     <div class="links">
       <a href="#about">Research</a>
       <a href="#papers">Papers</a>
@@ -217,7 +217,7 @@
     <p class="eyebrow"><span class="ring" aria-hidden="true"></span>Research</p>
     <h2>About</h2>
     <!-- 소개문 초안입니다. 자유롭게 고쳐 주세요. -->
-    <p class="statement">I study post-quantum cryptography at Korea University — the arithmetic behind isogeny- and lattice-based schemes, and what that arithmetic gives away once it runs on real hardware.</p>
+    <p class="statement">Post-quantum schemes are proved secure on paper and then have to run on a chip. I work on both ends — the arithmetic of isogeny- and lattice-based constructions, and the attacks that recover keys from how that arithmetic executes.</p>
     <ul class="interests">
       <li>
         <h3><span class="dot" style="--c: var(--viridian)" aria-hidden="true"></span>Isogenies &amp; quaternions</h3>
