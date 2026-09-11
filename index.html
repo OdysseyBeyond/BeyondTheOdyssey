@@ -131,9 +131,18 @@
 
   /* about */
   .statement {
-    font-weight: 300; font-size: clamp(20px, 2.05vw, 27px); line-height: 1.5;
-    max-width: 46ch; margin: 0 0 clamp(48px, 8vh, 80px); text-wrap: pretty;
+    font-weight: 300; font-size: clamp(19px, 1.72vw, 24px); line-height: 1.55;
+    max-width: 66ch; margin: 0 0 clamp(48px, 8vh, 80px);
   }
+  /* set as verse: each stanza is its own line, and a stanza that has to wrap
+     indents its continuation so the short last line reads as an ending, not
+     as a stray break. */
+  .statement .ln {
+    display: block;
+    padding-left: 1.15em; text-indent: -1.15em;
+    text-wrap: pretty;
+  }
+  .statement .ln + .ln { margin-top: 0.42em; }
   .statement em { font-style: italic; }
   .interests {
     list-style: none; margin: 0; padding: 0;
@@ -250,9 +259,11 @@
     <p class="eyebrow"><span class="ring" aria-hidden="true"></span>Research</p>
     <h2>About</h2>
     <!-- 소개문 초안입니다. 자유롭게 고쳐 주세요. -->
-    <p class="statement">A living anthology of studies and reflections — my voice woven with the wisdom of others, sung together as <em>Carmina Mea</em>.<br>
-    Not mine alone, but shaped by countless minds and timeless words;<br>
-    a work of learning as love, and love as the pursuit of beauty, gathered on this path of thought and art.</p>
+    <p class="statement">
+      <span class="ln">A living anthology of studies and reflections — my voice woven with the wisdom of others, sung together as <em>Carmina Mea</em>.</span>
+      <span class="ln">Not mine alone, but shaped by countless minds and timeless words;</span>
+      <span class="ln">a work of learning as love, and love as the pursuit of beauty, gathered on this path of thought and art.</span>
+    </p>
     <ul class="interests">
       <li>
         <h3><span class="dot" style="--c: var(--indigo)" aria-hidden="true"></span>Lattices</h3>
