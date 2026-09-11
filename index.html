@@ -59,7 +59,17 @@
   }
   nav .links { display: flex; flex-wrap: wrap; gap: 8px clamp(16px, 2.4vw, 32px); }
   nav a:hover { color: var(--ink); }
-  .copy { align-self: start; margin-top: 9vh; }
+  .copy { align-self: start; margin-top: 9vh; isolation: isolate; }
+  .copy::before {
+    content: ""; position: absolute; z-index: 0; pointer-events: none;
+    inset: -14% -16% -20% -10%;
+    background: radial-gradient(68% 62% at 34% 46%,
+      rgba(236, 239, 241, 0.94) 0%,
+      rgba(236, 239, 241, 0.82) 42%,
+      rgba(236, 239, 241, 0.45) 68%,
+      rgba(236, 239, 241, 0) 100%);
+  }
+  .copy > * { position: relative; z-index: 1; }
   h1 {
     font-family: var(--display); font-weight: 400;
     font-size: clamp(44px, 10.5vw, 168px); line-height: 0.9; letter-spacing: 0.02em;
@@ -69,7 +79,7 @@
   h1 .l2 { display: block; }
   .lede {
     font-weight: 300; font-size: clamp(18px, 1.5vw, 21px); line-height: 1.55; color: var(--soft);
-    margin: 30px 0 0 0.3em; max-width: 30ch;
+    margin: 30px 0 0 0.3em;
   }
   .hero-note {
     justify-self: end; text-align: right; max-width: 46ch;
@@ -206,7 +216,7 @@
   </nav>
   <div class="copy">
     <h1>JeongHwan <span class="l2">Lee</span></h1>
-    <p class="lede">Mathematician working in cryptography — quaternions, isogenies, lattices.</p>
+    <p class="lede">Mathematician working in cryptography</p>
   </div>
   <p class="hero-note">Hopf fibration <i class="m">S</i>³ → <i class="m">S</i>², stereographically projected. Each ring is one fibre: the orbit <i class="m">q</i> ↦ <i class="m">e</i><sup><i class="m">iθ</i></sup><i class="m">q</i> of a unit quaternion.</p>
 </header>
