@@ -24,6 +24,8 @@
     --text: "Karla", "Helvetica Neue", Arial, system-ui, sans-serif;
     --math: "Times New Roman", Georgia, serif;
     --gutter: clamp(20px, 5vw, 80px);
+    --name-size: clamp(44px, 10.5vw, 168px);
+    --faint: rgba(31, 36, 51, 0.34);
   }
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -59,7 +61,7 @@
   }
   nav .links { display: flex; flex-wrap: wrap; gap: 8px clamp(16px, 2.4vw, 32px); }
   nav a:hover { color: var(--ink); }
-  .copy { align-self: start; margin-top: 9vh; isolation: isolate; }
+  .copy { align-self: start; margin-top: 2.5vh; isolation: isolate; }
   .copy::before {
     content: ""; position: absolute; z-index: 0; pointer-events: none;
     inset: -14% -16% -20% -10%;
@@ -72,22 +74,24 @@
   .copy > * { position: relative; z-index: 1; }
   h1 {
     font-family: var(--display); font-weight: 400;
-    font-size: clamp(44px, 10.5vw, 168px); line-height: 0.9; letter-spacing: 0.02em;
+    font-size: var(--name-size); line-height: 0.9; letter-spacing: 0.02em;
     text-transform: uppercase; margin: 0;
     display: inline-block; text-align: right;
   }
-  h1 .l2 { display: block; }
+  h1 .l2 { display: block; color: var(--faint); }
   .lede {
     font-weight: 300; font-size: clamp(18px, 1.5vw, 21px); line-height: 1.55; color: var(--soft);
-    margin: 30px 0 0 0.3em;
+    margin: 26px 0 0 calc(var(--name-size) * 3.912);
   }
   .hero-note {
     justify-self: end; text-align: right; max-width: 46ch;
-    font-size: 12.5px; letter-spacing: 0.03em; line-height: 1.5; color: var(--soft); margin: 0;
+    font-size: 12.5px; letter-spacing: 0.03em; line-height: 1.5; color: var(--soft);
+    margin: 0 calc(var(--gutter) * -0.62) -22px 0;
   }
   @media (max-width: 700px) {
-    .copy { margin-top: 5vh; }
-    .hero-note { justify-self: start; text-align: left; }
+    .copy { margin-top: 1.5vh; }
+    .hero-note { justify-self: start; text-align: left; margin: 0; }
+    .lede { margin-left: 0.3em; }
   }
 
   /* ---------------- sections ---------------- */
@@ -97,6 +101,7 @@
     padding-block: clamp(72px, 12vh, 132px);
     border-top: 1px solid var(--rule);
   }
+  main section:first-of-type { border-top: 0; }
   .eyebrow {
     display: flex; align-items: center; gap: 12px;
     font-size: 12.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--soft);
