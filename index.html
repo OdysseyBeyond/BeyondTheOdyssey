@@ -7,335 +7,331 @@
 <meta name="description" content="JeongHwan Lee — mathematician working in cryptography at Korea University: quaternions, isogenies, lattices.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Italiana&family=Karla:ital,wght@0,300;0,400;0,500;1,300&display=swap">
 <style>
   :root {
     color-scheme: light;
-    --white: #ffffff;
-    --black: #000000;
-    --plate: #f1f1f1;
-    --grey: #545454;
-    --rule: #dcdcdc;
-    --sans: "Archivo", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    --math: "Times New Roman", Times, serif;
-    --gutter: clamp(16px, 3vw, 40px);
+    --paper: #eceff1;
+    --paper-deep: #e2e6e9;
+    --ink: #1f2433;
+    --soft: #5d6477;
+    --rule: rgba(31, 36, 51, 0.16);
+    --indigo: #3b4a9c;
+    --viridian: #2f7d6d;
+    --madder: #c4506a;
+    --gamboge: #d39a1f;
+    --display: "Italiana", "Didot", "Bodoni 72", "Playfair Display", Georgia, serif;
+    --text: "Karla", "Helvetica Neue", Arial, system-ui, sans-serif;
+    --math: "Times New Roman", Georgia, serif;
+    --gutter: clamp(20px, 5vw, 80px);
   }
   *, *::before, *::after { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    background: var(--white);
-    color: var(--black);
-    font-family: var(--sans);
-    font-size: 17px;
-    line-height: 1.5;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--text);
+    font-size: 19px;
+    line-height: 1.6;
     -webkit-font-smoothing: antialiased;
   }
-  a { color: inherit; }
-  :focus-visible { outline: 2px solid var(--black); outline-offset: 3px; }
-  ::selection { background: var(--black); color: var(--white); }
-  i.m { font-family: var(--math); font-style: italic; font-size: 1.08em; }
-  .label { font-size: 12px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--indigo); outline-offset: 3px; border-radius: 2px; }
+  ::selection { background: rgba(59, 74, 156, 0.18); }
+  i.m { font-family: var(--math); font-style: italic; }
 
-  /* ---------- top bar ---------- */
-  .bar {
-    position: sticky; top: 0; z-index: 10;
-    background: var(--white);
-    display: flex; justify-content: space-between; align-items: center; gap: 12px 24px; flex-wrap: wrap;
-    padding-inline: var(--gutter); padding-block: 14px;
-    border-bottom: 1px solid var(--rule);
+  /* ---------------- hero ---------------- */
+  .hero {
+    position: relative;
+    min-height: 92vh; min-height: 92svh;
+    overflow: hidden;
+    display: grid; grid-template-rows: auto 1fr auto;
+    padding-inline: var(--gutter);
+    padding-block: 30px 36px;
   }
-  .bar a { text-decoration: none; }
-  .bar nav { display: flex; flex-wrap: wrap; gap: 6px 24px; }
-  .bar nav a:hover, .bar nav a:focus-visible { text-decoration: underline; text-underline-offset: 4px; }
-
-  /* ---------- intro ---------- */
-  .intro { padding-inline: var(--gutter); padding-block: clamp(20px, 3vw, 36px) 0; }
-  .name {
-    margin: 0; font-weight: 900; font-stretch: 112%; line-height: 0.82; letter-spacing: -0.02em;
-    text-transform: uppercase; white-space: nowrap;
-    font-size: 11vw; /* refined by fitText() */
+  #hopf { position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+    -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); }
+  .hero > *:not(canvas) { position: relative; }
+  nav {
+    display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px 24px;
+    font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--soft);
   }
-  .name .fit { display: inline-block; }
-  .name .mbr { display: none; }
-  @media (max-width: 640px) { .name .mbr { display: inline; } .name .sp { display: none; } }
-
-  .intro-grid {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 24px clamp(16px, 3vw, 40px);
-    margin-top: clamp(24px, 3.5vw, 48px);
+  nav .links { display: flex; flex-wrap: wrap; gap: 8px clamp(16px, 2.4vw, 32px); }
+  nav a:hover { color: var(--ink); }
+  .copy { align-self: start; margin-top: 9vh; }
+  h1 {
+    font-family: var(--display); font-weight: 400;
+    font-size: clamp(44px, 10.5vw, 168px); line-height: 0.9; letter-spacing: 0.02em;
+    text-transform: uppercase; margin: 0;
   }
-  .info { display: flex; flex-direction: column; gap: 28px; padding-bottom: 8px; }
-  .facts { margin: 0; display: grid; gap: 14px; }
-  .facts div { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr); gap: 12px; border-top: 1px solid var(--rule); padding-top: 10px; }
-  .facts dt { margin: 0; }
-  .facts dd { margin: 0; font-size: 16px; font-weight: 500; }
-  .statement { margin: 0; font-size: clamp(19px, 1.6vw, 22px); line-height: 1.45; font-weight: 500; max-width: 34ch; }
-  .cta {
-    align-self: start; display: inline-flex; align-items: center; gap: 14px;
-    background: var(--black); color: var(--white); text-decoration: none;
-    padding: 15px 22px; min-width: 15rem; justify-content: space-between;
+  h1 .l2 { display: block; padding-left: 1.6em; }
+  .lede {
+    font-weight: 300; font-size: clamp(18px, 1.5vw, 21px); line-height: 1.55; color: var(--soft);
+    margin: 30px 0 0 0.3em; max-width: 30ch;
   }
-  .cta:hover { background: #262626; }
-
-  .plate { margin: 0; }
-  .plate .img { position: relative; background: var(--plate); height: min(72vh, 58vw); min-height: 340px; overflow: hidden; }
-  .plate canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-  .plate figcaption { display: flex; justify-content: space-between; gap: 8px 20px; flex-wrap: wrap; padding-top: 10px; }
-  .plate figcaption span:last-child { font-size: 14px; color: var(--grey); }
-  @media (max-width: 860px) {
-    .intro-grid { grid-template-columns: minmax(0, 1fr); }
-    .plate { order: -1; }
-    .plate .img { height: 92vw; max-height: 560px; }
+  .hero-note {
+    justify-self: end; text-align: right; max-width: 46ch;
+    font-size: 12.5px; letter-spacing: 0.03em; line-height: 1.5; color: var(--soft); margin: 0;
+  }
+  @media (max-width: 700px) {
+    .copy { margin-top: 5vh; }
+    .hero-note { justify-self: start; text-align: left; }
   }
 
-  /* ---------- sections ---------- */
-  section.block { padding-inline: var(--gutter); padding-block: clamp(72px, 10vw, 128px) 0; }
-  .head { display: flex; justify-content: space-between; align-items: end; gap: 16px 32px; flex-wrap: wrap; margin-bottom: 22px; }
-  h2 { margin: 0; font-size: clamp(40px, 6.4vw, 92px); line-height: 0.86; font-weight: 900; font-stretch: 112%; letter-spacing: -0.02em; text-transform: uppercase; }
-  .count { color: var(--grey); }
-
-  /* research */
-  .fields { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
-  .field {
-    width: 100%; text-align: left; font: inherit; color: inherit; cursor: pointer;
-    background: var(--plate); border: 0; padding: 22px 22px 20px;
-    display: flex; flex-direction: column; gap: 10px; min-height: 15rem;
-    transition: background-color 0.18s, color 0.18s;
+  /* ---------------- sections ---------------- */
+  main { padding-inline: var(--gutter); }
+  section {
+    max-width: 1160px; margin: 0 auto;
+    padding-block: clamp(72px, 12vh, 132px);
+    border-top: 1px solid var(--rule);
   }
-  .field:hover, .field:focus-visible { background: var(--black); color: var(--white); }
-  .field:hover .fdesc, .field:focus-visible .fdesc { color: #cfcfcf; }
-  .ftitle { font-size: clamp(24px, 2.3vw, 32px); line-height: 1; font-weight: 800; font-stretch: 106%; text-transform: uppercase; letter-spacing: -0.01em; }
-  .fdesc { color: var(--grey); font-size: 16px; }
-  .fmeta { margin-top: auto; display: flex; justify-content: space-between; }
-  @media (max-width: 860px) { .fields { grid-template-columns: minmax(0, 1fr); } .field { min-height: 0; } }
+  .eyebrow {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 12.5px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--soft);
+    margin: 0 0 22px;
+  }
+  .ring {
+    width: 18px; height: 11px; flex: none;
+    border: 1.5px solid var(--c, var(--indigo)); border-radius: 50%;
+    transform: rotate(-24deg); opacity: 0.85;
+  }
+  h2 {
+    font-family: var(--display); font-weight: 400; text-transform: uppercase;
+    font-size: clamp(40px, 5.2vw, 64px); line-height: 1; letter-spacing: 0.03em;
+    margin: 0 0 clamp(36px, 6vh, 60px);
+  }
 
-  /* papers */
-  .filters { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+  /* about */
+  .statement {
+    font-weight: 300; font-size: clamp(22px, 2.3vw, 30px); line-height: 1.45;
+    max-width: 36ch; margin: 0 0 clamp(48px, 8vh, 80px); text-wrap: pretty;
+  }
+  .interests {
+    list-style: none; margin: 0; padding: 0;
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px clamp(24px, 4vw, 56px);
+  }
+  .interests li { border-top: 1px solid var(--rule); padding-top: 22px; }
+  .interests h3 {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 21px; font-weight: 500; line-height: 1.25; margin: 0 0 10px;
+  }
+  .interests p { margin: 0; color: var(--soft); font-size: 17px; line-height: 1.55; }
+  @media (max-width: 860px) { .interests { grid-template-columns: minmax(0, 1fr); } }
+
+  /* publications */
+  .filters { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: -18px 0 44px; }
   .filters button {
-    font: inherit; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.02em;
-    background: none; border: 0; padding: 4px 0; cursor: pointer; color: var(--grey);
-    border-bottom: 2px solid transparent;
+    font: inherit; font-size: 14px; letter-spacing: 0.04em; color: var(--soft);
+    background: none; border: 0; padding: 4px 0; cursor: pointer;
+    display: inline-flex; align-items: center; gap: 9px;
+    border-bottom: 1px solid transparent;
   }
-  .filters button:hover { color: var(--black); }
-  .filters button[aria-pressed="true"] { color: var(--black); border-bottom-color: var(--black); }
+  .filters button:hover { color: var(--ink); }
+  .filters button[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+  .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--c); flex: none; display: inline-block; }
 
-  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 44px 16px; }
-  .tile[hidden] { display: none; }
-  .tile.feature { grid-column: span 2; }
-  .panel {
-    display: flex; flex-direction: column; justify-content: space-between;
-    height: clamp(200px, 17vw, 270px); padding: 16px 16px 14px;
-    background: var(--plate); color: var(--black); text-decoration: none;
-    transition: background-color 0.18s, color 0.18s;
+  .year-group {
+    display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 0 clamp(20px, 4vw, 56px);
+    border-top: 1px solid var(--rule);
   }
-  .panel:hover, .panel:focus-visible { background: var(--black); color: var(--white); }
-  .venue { font-size: clamp(28px, 2.8vw, 44px); line-height: 0.9; font-weight: 900; font-stretch: 100%; text-transform: uppercase; letter-spacing: -0.02em; overflow-wrap: anywhere; }
-  .feature .venue { font-size: clamp(40px, 5.4vw, 88px); font-stretch: 112%; }
-  .panel .pfoot { display: flex; justify-content: space-between; align-items: end; gap: 8px; }
-  .tile .title { margin: 14px 0 6px; font-size: 17px; line-height: 1.3; font-weight: 700; }
-  .tile .title a { text-decoration: none; }
-  .tile .title a:hover { text-decoration: underline; text-underline-offset: 3px; }
-  .tile .authors { margin: 0 0 10px; font-size: 15px; color: var(--grey); }
-  .tile .authors b { color: var(--black); font-weight: 700; }
-  .tile .links { display: flex; flex-wrap: wrap; gap: 4px 18px; margin: 0; }
-  .tile .links a { text-underline-offset: 3px; }
-  .tile .links a:hover { text-decoration-thickness: 2px; }
-  @media (max-width: 1040px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-  @media (max-width: 560px) { .grid { grid-template-columns: minmax(0, 1fr); } .tile.feature { grid-column: auto; } .panel { height: 220px; } }
+  .year-group[hidden] { display: none; }
+  .year {
+    font-family: var(--display); font-size: 44px; line-height: 1; letter-spacing: 0.04em;
+    margin: 0; padding-top: 26px; align-self: start; position: sticky; top: 24px;
+  }
+  .pubs { list-style: none; margin: 0; padding: 0; }
+  .pub { padding-block: 26px; }
+  .pub + .pub { border-top: 1px solid var(--rule); }
+  .pub[hidden] { display: none; }
+  .pub .title { font-size: 22px; font-weight: 400; line-height: 1.3; margin: 0 0 8px; text-wrap: balance; }
+  .pub .title a { background-image: linear-gradient(var(--indigo), var(--indigo)); background-size: 0 1px; background-repeat: no-repeat; background-position: 0 100%; transition: background-size 0.4s ease, color 0.2s; }
+  .pub .title a:hover { color: var(--indigo); background-size: 100% 1px; }
+  .pub .authors { margin: 0 0 12px; font-size: 16.5px; color: var(--soft); }
+  .pub .authors b { font-weight: 500; color: var(--ink); }
+  .pub .meta { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; margin: 0; font-size: 13px; letter-spacing: 0.06em; }
+  .pub .topics { display: inline-flex; gap: 6px; }
+  .pub .venue { text-transform: uppercase; letter-spacing: 0.16em; color: var(--ink); }
+  .pub .meta a { color: var(--soft); border-bottom: 1px solid var(--rule); }
+  .pub .meta a:hover { color: var(--indigo); border-bottom-color: currentColor; }
+  @media (max-width: 700px) {
+    .year-group { grid-template-columns: minmax(0, 1fr); }
+    .year { position: static; font-size: 36px; }
+  }
 
   /* talks */
-  .rows { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--black); }
-  .row { display: grid; grid-template-columns: 9rem minmax(0, 2fr) minmax(0, 1fr); gap: 6px 24px; padding-block: 16px; border-bottom: 1px solid var(--rule); align-items: baseline; }
-  .row .t { font-weight: 700; }
-  .row .where { color: var(--grey); }
-  .row.placeholder { color: #9a9a9a; }
-  .row.placeholder .where { color: #9a9a9a; }
-  @media (max-width: 700px) { .row { grid-template-columns: minmax(0, 1fr); } }
+  .talks { list-style: none; margin: 0; padding: 0; }
+  .talk { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 4px clamp(20px, 4vw, 56px); padding-block: 22px; border-top: 1px solid var(--rule); }
+  .talk:last-child { border-bottom: 1px solid var(--rule); }
+  .talk .when { font-size: 14px; letter-spacing: 0.12em; color: var(--soft); padding-top: 4px; }
+  .talk .t { font-size: 21px; margin: 0; line-height: 1.3; }
+  .talk .where { font-size: 16px; color: var(--soft); margin: 2px 0 0; }
+  .talk.placeholder { color: var(--soft); opacity: 0.6; }
+  @media (max-width: 700px) { .talk { grid-template-columns: minmax(0, 1fr); } }
 
   /* contact */
-  .contact { padding-bottom: clamp(72px, 10vw, 128px); }
-  .mail { display: block; font-weight: 900; font-stretch: 100%; line-height: 1; letter-spacing: -0.03em; text-decoration: none; white-space: nowrap; font-size: 8vw; margin-top: 8px; }
-  .mail .fit { display: inline-block; }
-  .mail:hover { text-decoration: underline; text-decoration-thickness: 0.06em; text-underline-offset: 0.12em; }
-  .elsewhere { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-wrap: wrap; gap: 8px 28px; border-top: 1px solid var(--black); padding-top: 14px; }
-  .elsewhere li:last-child { margin-left: auto; color: var(--grey); }
+  .mail {
+    font-family: var(--display); font-size: clamp(30px, 5.4vw, 72px); line-height: 1.1; letter-spacing: 0.02em;
+    overflow-wrap: anywhere; display: inline-block;
+    background-image: linear-gradient(var(--madder), var(--madder)); background-size: 100% 1px; background-repeat: no-repeat; background-position: 0 96%;
+  }
+  .mail:hover { color: var(--indigo); }
+  .elsewhere { list-style: none; padding: 0; margin: 34px 0 0; display: flex; flex-wrap: wrap; gap: 10px 34px; font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase; }
+  .elsewhere a { color: var(--soft); }
+  .elsewhere a:hover { color: var(--ink); }
+  .addr { margin: 26px 0 0; color: var(--soft); font-size: 17px; }
 
-  footer { background: var(--black); color: var(--white); padding-inline: var(--gutter); padding-block: 32px 40px; }
-  footer .inner { display: flex; justify-content: space-between; align-items: end; gap: 20px 48px; flex-wrap: wrap; }
-  footer p { margin: 0; font-size: 14px; line-height: 1.55; max-width: 70ch; color: #d6d6d6; }
+  footer { background: var(--paper-deep); padding-inline: var(--gutter); padding-block: 44px 56px; }
+  footer .inner {
+    max-width: 1160px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: end; flex-wrap: wrap; gap: 20px 48px;
+    font-size: 14px; line-height: 1.6; color: var(--soft);
+  }
+  footer .colophon { max-width: 64ch; margin: 0; }
+  footer p { margin: 0; }
 </style>
 </head>
 <body>
 
-<header class="bar">
-  <a class="label" href="#top" id="top">JeongHwan Lee</a>
-  <nav class="label" aria-label="Primary">
-    <a href="#research">Research</a>
-    <a href="#papers">Papers</a>
-    <a href="#talks">Talks</a>
-    <a href="#contact">Contact</a>
+<header class="hero" id="top">
+  <canvas id="hopf" aria-hidden="true"></canvas>
+  <nav aria-label="Primary">
+    <a href="#top">J. Lee</a>
+    <div class="links">
+      <a href="#about">Research</a>
+      <a href="#papers">Papers</a>
+      <a href="#talks">Talks</a>
+      <a href="#contact">Contact</a>
+    </div>
   </nav>
+  <div class="copy">
+    <h1>JeongHwan <span class="l2">Lee</span></h1>
+    <p class="lede">Mathematician working in cryptography — quaternions, isogenies, lattices.</p>
+  </div>
+  <p class="hero-note">Hopf fibration <i class="m">S</i>³ → <i class="m">S</i>², stereographically projected. Each ring is one fibre: the orbit <i class="m">q</i> ↦ <i class="m">e</i><sup><i class="m">iθ</i></sup><i class="m">q</i> of a unit quaternion.</p>
 </header>
 
 <main>
-  <section class="intro" aria-labelledby="name">
-    <h1 class="name" id="name"><span class="fit">JeongHwan<br class="mbr"><span class="sp"> </span>Lee</span></h1>
 
-    <div class="intro-grid">
-      <div class="info">
-        <dl class="facts">
-          <div><dt class="label">Field</dt><dd>Mathematics of cryptography</dd></div>
-          <div><dt class="label">Affiliation</dt><dd>Korea University, Seoul</dd></div>
-          <div><dt class="label">Topics</dt><dd>Quaternions · Isogenies · Lattices · Implementation security</dd></div>
-        </dl>
-        <!-- 소개문 초안입니다. 자유롭게 고쳐 주세요. -->
-        <p class="statement">I study post-quantum cryptography: the arithmetic behind isogeny- and lattice-based schemes, and what that arithmetic gives away once it runs on real hardware.</p>
-        <a class="cta label" href="#papers"><span>View papers</span><span>7</span></a>
-      </div>
-
-      <figure class="plate">
-        <div class="img"><canvas id="hopf" aria-hidden="true"></canvas></div>
-        <figcaption>
-          <span class="label">Hopf fibration <i class="m">S</i>³ → <i class="m">S</i>²</span>
-          <span>Fibres {<i class="m">e</i><sup><i class="m">iθ</i></sup><i class="m">q</i>} of unit quaternions <i class="m">q</i> = <i class="m">z</i>₁ + <i class="m">z</i>₂<i class="m">j</i>, projected to ℝ³</span>
-        </figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="block" id="research" aria-labelledby="h-research">
-    <div class="head"><h2 id="h-research">Research</h2><span class="label count">3 areas</span></div>
-    <ul class="fields">
-      <li><button class="field" type="button" data-topic="isogeny">
-        <span class="ftitle">Isogenies &amp; quaternions</span>
-        <span class="fdesc">SQIsign, quaternion arithmetic with explicit worst-case bounds, terSIDH.</span>
-        <span class="fmeta label"><span>3 papers</span><span>View →</span></span>
-      </button></li>
-      <li><button class="field" type="button" data-topic="lattice">
-        <span class="ftitle">Lattices</span>
-        <span class="fdesc">LWE with sparse secrets and side information, fully homomorphic encryption, threshold FHE.</span>
-        <span class="fmeta label"><span>3 papers</span><span>View →</span></span>
-      </button></li>
-      <li><button class="field" type="button" data-topic="impl">
-        <span class="ftitle">Implementation security</span>
-        <span class="fdesc">Fault attacks, simple power analysis, masking, constant-time implementation.</span>
-        <span class="fmeta label"><span>4 papers</span><span>View →</span></span>
-      </button></li>
+  <section id="about">
+    <p class="eyebrow"><span class="ring" aria-hidden="true"></span>Research</p>
+    <h2>About</h2>
+    <!-- 소개문 초안입니다. 자유롭게 고쳐 주세요. -->
+    <p class="statement">I study post-quantum cryptography at Korea University — the arithmetic behind isogeny- and lattice-based schemes, and what that arithmetic gives away once it runs on real hardware.</p>
+    <ul class="interests">
+      <li>
+        <h3><span class="dot" style="--c: var(--viridian)" aria-hidden="true"></span>Isogenies &amp; quaternions</h3>
+        <p>SQIsign, quaternion arithmetic with explicit worst-case bounds, terSIDH.</p>
+      </li>
+      <li>
+        <h3><span class="dot" style="--c: var(--indigo)" aria-hidden="true"></span>Lattices</h3>
+        <p>LWE with sparse secrets and side information, fully homomorphic encryption, threshold FHE.</p>
+      </li>
+      <li>
+        <h3><span class="dot" style="--c: var(--madder)" aria-hidden="true"></span>Implementation security</h3>
+        <p>Fault attacks, simple power analysis, masking, constant-time implementation.</p>
+      </li>
     </ul>
   </section>
 
-  <section class="block" id="papers" aria-labelledby="h-papers">
-    <div class="head">
-      <h2 id="h-papers">Papers</h2>
-      <div class="filters" role="group" aria-label="Filter papers by topic">
-        <button type="button" id="f-all" data-topic="all" aria-pressed="true">All (7)</button>
-        <button type="button" id="f-isogeny" data-topic="isogeny" aria-pressed="false">Isogenies</button>
-        <button type="button" id="f-lattice" data-topic="lattice" aria-pressed="false">Lattices</button>
-        <button type="button" id="f-impl" data-topic="impl" aria-pressed="false">Implementation</button>
-      </div>
+  <section id="papers">
+    <p class="eyebrow"><span class="ring" style="--c: var(--viridian)" aria-hidden="true"></span>Publications &amp; preprints</p>
+    <h2>Papers</h2>
+    <div class="filters" role="group" aria-label="Filter papers by topic">
+      <button type="button" id="f-isogeny" data-topic="isogeny" aria-pressed="false"><span class="dot" style="--c: var(--viridian)"></span>Isogenies</button>
+      <button type="button" id="f-lattice" data-topic="lattice" aria-pressed="false"><span class="dot" style="--c: var(--indigo)"></span>Lattices</button>
+      <button type="button" id="f-impl" data-topic="impl" aria-pressed="false"><span class="dot" style="--c: var(--madder)"></span>Implementation security</button>
     </div>
 
-    <ol class="grid">
-      <li class="tile feature" data-topics="lattice">
-        <a class="panel" href="https://eprint.iacr.org/2026/973" aria-label="CRYPTO 2026 paper on ePrint">
-          <span class="venue">Crypto</span>
-          <span class="pfoot label"><span>Lattices</span><span>2026</span></span>
-        </a>
-        <p class="title"><a href="https://eprint.iacr.org/2026/973">Asynchronous Lagrange-Based Threshold FHE with Smaller Modulus Overhead</a></p>
-        <p class="authors">Won Kim, Changmin Lee, <b>JeongHwan Lee</b>, Alain Passelègue, Damien Stehlé</p>
-        <p class="links label"><a href="https://eprint.iacr.org/2026/973">ePrint 2026/973</a></p>
-      </li>
-      <li class="tile" data-topics="lattice">
-        <a class="panel" href="https://eprint.iacr.org/2026/1081" aria-label="Preprint on ePrint">
-          <span class="venue">Preprint</span>
-          <span class="pfoot label"><span>Lattices</span><span>2026</span></span>
-        </a>
-        <p class="title"><a href="https://eprint.iacr.org/2026/1081">From Perfect to Approximate Hints: Efficient LWE Secret Recovery Leveraging Low Hamming Weight</a></p>
-        <p class="authors">Minki Hhan, Ga Hee Hong, Jiseung Kim, Changmin Lee, <b>JeongHwan Lee</b></p>
-        <p class="links label"><a href="https://eprint.iacr.org/2026/1081">ePrint 2026/1081</a></p>
-      </li>
-      <li class="tile" data-topics="isogeny">
-        <a class="panel" href="https://eprint.iacr.org/2025/1649" aria-label="PKC 2026 paper on ePrint">
-          <span class="venue">PKC</span>
-          <span class="pfoot label"><span>Isogenies</span><span>2026</span></span>
-        </a>
-        <p class="title"><a href="https://eprint.iacr.org/2025/1649">SQIsign with Fixed-Precision Integer Arithmetic</a></p>
-        <p class="authors">Won Kim, <b>JeongHwan Lee</b>, Hyeonhak Kim, Changmin Lee</p>
-        <p class="links label"><a href="https://eprint.iacr.org/2025/1649">ePrint 2025/1649</a><a href="https://link.springer.com/chapter/10.1007/978-3-032-26737-5_1">Springer</a></p>
-      </li>
-      <li class="tile" data-topics="lattice impl">
-        <a class="panel" href="https://tches.iacr.org/index.php/TCHES/article/view/12915" aria-label="TCHES 2026 paper">
-          <span class="venue">TCHES</span>
-          <span class="pfoot label"><span>Lattices / Implementation</span><span>2026</span></span>
-        </a>
-        <p class="title"><a href="https://tches.iacr.org/index.php/TCHES/article/view/12915">Secret Key Recovery of FALCON using Simple Power Analysis in Conditional Calculator</a></p>
-        <p class="authors">GyuSang Kim, <b>JeongHwan Lee</b>, Myeonghoon Lee, Seokhie Hong, HeeSeok Kim</p>
-        <p class="links label"><a href="https://tches.iacr.org/index.php/TCHES/article/view/12915">TCHES 2026 · Issue 2</a></p>
-      </li>
-      <li class="tile" data-topics="impl">
-        <a class="panel" href="https://tches.iacr.org/index.php/TCHES/article/view/12882" aria-label="TCHES 2026 paper">
-          <span class="venue">TCHES</span>
-          <span class="pfoot label"><span>Implementation</span><span>2026</span></span>
-        </a>
-        <p class="title"><a href="https://tches.iacr.org/index.php/TCHES/article/view/12882">ARMOR: First-Order Masking of Activation and ArgMax Gadgets for Side-Channel Resistant Neural Networks</a></p>
-        <p class="authors">Won Geun Shin, HeeSeok Kim, <b>JeongHwan Lee</b>, Sangyun Jung</p>
-        <p class="links label"><a href="https://tches.iacr.org/index.php/TCHES/article/view/12882">TCHES 2026 · Issue 2</a></p>
-      </li>
-      <li class="tile" data-topics="isogeny impl">
-        <a class="panel" href="https://eprint.iacr.org/2025/1563" aria-label="Preprint on ePrint">
-          <span class="venue">Preprint</span>
-          <span class="pfoot label"><span>Isogenies / Implementation</span><span>2025</span></span>
-        </a>
-        <p class="title"><a href="https://eprint.iacr.org/2025/1563">Optimized Constant-Time Implementation of terSIDH</a></p>
-        <p class="authors">Taehun Kang, Donghoe Heo, <b>JeongHwan Lee</b>, Suhri Kim, Changmin Lee</p>
-        <p class="links label"><a href="https://eprint.iacr.org/2025/1563">ePrint 2025/1563</a></p>
-      </li>
-      <li class="tile" data-topics="isogeny impl">
-        <a class="panel" href="https://eprint.iacr.org/2024/581" aria-label="PQCrypto 2024 paper on ePrint">
-          <span class="venue">PQCrypto</span>
-          <span class="pfoot label"><span>Isogenies / Implementation</span><span>2024</span></span>
-        </a>
-        <p class="title"><a href="https://eprint.iacr.org/2024/581">Fault Attack on SQIsign</a></p>
-        <p class="authors"><b>JeongHwan Lee</b>, Donghoe Heo, Hyeonhak Kim, Gyusang Kim, Suhri Kim, HeeSeok Kim, Seokhie Hong</p>
-        <p class="links label"><a href="https://eprint.iacr.org/2024/581">ePrint 2024/581</a><a href="https://doi.org/10.1007/978-3-031-62746-0_3">DOI</a></p>
-      </li>
-    </ol>
+    <div class="year-group">
+      <h3 class="year">2026</h3>
+      <ol class="pubs">
+        <li class="pub" data-topics="lattice">
+          <p class="title"><a href="https://eprint.iacr.org/2026/973">Asynchronous Lagrange-Based Threshold FHE with Smaller Modulus Overhead</a></p>
+          <p class="authors">Won Kim, Changmin Lee, <b>JeongHwan Lee</b>, Alain Passelègue, Damien Stehlé</p>
+          <p class="meta"><span class="topics"><span class="dot" style="--c: var(--indigo)" title="Lattices"></span></span><span class="venue">CRYPTO 2026</span><a href="https://eprint.iacr.org/2026/973">ePrint 2026/973</a></p>
+        </li>
+        <li class="pub" data-topics="lattice">
+          <p class="title"><a href="https://eprint.iacr.org/2026/1081">From Perfect to Approximate Hints: Efficient LWE Secret Recovery Leveraging Low Hamming Weight</a></p>
+          <p class="authors">Minki Hhan, Ga Hee Hong, Jiseung Kim, Changmin Lee, <b>JeongHwan Lee</b></p>
+          <p class="meta"><span class="topics"><span class="dot" style="--c: var(--indigo)" title="Lattices"></span></span><span class="venue">Preprint</span><a href="https://eprint.iacr.org/2026/1081">ePrint 2026/1081</a></p>
+        </li>
+        <li class="pub" data-topics="isogeny">
+          <p class="title"><a href="https://eprint.iacr.org/2025/1649">SQIsign with Fixed-Precision Integer Arithmetic</a></p>
+          <p class="authors">Won Kim, <b>JeongHwan Lee</b>, Hyeonhak Kim, Changmin Lee</p>
+          <p class="meta"><span class="topics"><span class="dot" style="--c: var(--viridian)" title="Isogenies"></span></span><span class="venue">PKC 2026</span><a href="https://eprint.iacr.org/2025/1649">ePrint 2025/1649</a><a href="https://link.springer.com/chapter/10.1007/978-3-032-26737-5_1">Springer</a></p>
+        </li>
+        <li class="pub" data-topics="lattice impl">
+          <p class="title"><a href="https://tches.iacr.org/index.php/TCHES/article/view/12915">Secret Key Recovery of FALCON using Simple Power Analysis in Conditional Calculator</a></p>
+          <p class="authors">GyuSang Kim, <b>JeongHwan Lee</b>, Myeonghoon Lee, Seokhie Hong, HeeSeok Kim</p>
+          <p class="meta"><span class="topics"><span class="dot" style="--c: var(--indigo)" title="Lattices"></span><span class="dot" style="--c: var(--madder)" title="Implementation security"></span></span><span class="venue">TCHES 2026 · Issue 2</span><a href="https://tches.iacr.org/index.php/TCHES/article/view/12915">TCHES</a></p>
+        </li>
+        <li class="pub" data-topics="impl">
+          <p class="title"><a href="https://tches.iacr.org/index.php/TCHES/article/view/12882">ARMOR: First-Order Masking of Activation and ArgMax Gadgets for Side-Channel Resistant Neural Networks</a></p>
+          <p class="authors">Won Geun Shin, HeeSeok Kim, <b>JeongHwan Lee</b>, Sangyun Jung</p>
+          <p class="meta"><span class="topics"><span class="dot" style="--c: var(--madder)" title="Implementation security"></span></span><span class="venue">TCHES 2026 · Issue 2</span><a href="https://tches.iacr.org/index.php/TCHES/article/view/12882">TCHES</a></p>
+        </li>
+      </ol>
+    </div>
+
+    <div class="year-group">
+      <h3 class="year">2025</h3>
+      <ol class="pubs">
+        <li class="pub" data-topics="isogeny impl">
+          <p class="title"><a href="https://eprint.iacr.org/2025/1563">Optimized Constant-Time Implementation of terSIDH</a></p>
+          <p class="authors">Taehun Kang, Donghoe Heo, <b>JeongHwan Lee</b>, Suhri Kim, Changmin Lee</p>
+          <p class="meta"><span class="topics"><span class="dot" style="--c: var(--viridian)" title="Isogenies"></span><span class="dot" style="--c: var(--madder)" title="Implementation security"></span></span><span class="venue">Preprint</span><a href="https://eprint.iacr.org/2025/1563">ePrint 2025/1563</a></p>
+        </li>
+      </ol>
+    </div>
+
+    <div class="year-group">
+      <h3 class="year">2024</h3>
+      <ol class="pubs">
+        <li class="pub" data-topics="isogeny impl">
+          <p class="title"><a href="https://eprint.iacr.org/2024/581">Fault Attack on SQIsign</a></p>
+          <p class="authors"><b>JeongHwan Lee</b>, Donghoe Heo, Hyeonhak Kim, Gyusang Kim, Suhri Kim, HeeSeok Kim, Seokhie Hong</p>
+          <p class="meta"><span class="topics"><span class="dot" style="--c: var(--viridian)" title="Isogenies"></span><span class="dot" style="--c: var(--madder)" title="Implementation security"></span></span><span class="venue">PQCrypto 2024</span><a href="https://eprint.iacr.org/2024/581">ePrint 2024/581</a><a href="https://doi.org/10.1007/978-3-031-62746-0_3">DOI</a></p>
+        </li>
+      </ol>
+    </div>
   </section>
 
-  <section class="block" id="talks" aria-labelledby="h-talks">
-    <div class="head"><h2 id="h-talks">Talks</h2></div>
-    <ol class="rows">
+  <section id="talks">
+    <p class="eyebrow"><span class="ring" style="--c: var(--madder)" aria-hidden="true"></span>Seminars &amp; conferences</p>
+    <h2>Talks</h2>
+    <ol class="talks">
       <!-- 발표 추가 형식 (placeholder 줄은 지워 주세요):
-      <li class="row">
-        <span class="label">2026.08</span>
-        <span class="t">Talk title</span>
-        <span class="where">Event, City · <a href="#">Slides</a></span>
+      <li class="talk">
+        <span class="when">2026 · 08</span>
+        <div><p class="t">Talk title</p><p class="where">Event, City · <a href="#">slides</a></p></div>
       </li>
       -->
-      <li class="row placeholder">
-        <span class="label">YYYY.MM</span>
-        <span class="t">Talk title</span>
-        <span class="where">Event, City · Slides</span>
+      <li class="talk placeholder">
+        <span class="when">YYYY · MM</span>
+        <div><p class="t">Talk title</p><p class="where">Event, City · slides</p></div>
       </li>
     </ol>
   </section>
 
-  <section class="block contact" id="contact" aria-labelledby="h-contact">
-    <div class="head"><h2 id="h-contact">Contact</h2></div>
-    <a class="mail" href="mailto:hwani0814@korea.ac.kr"><span class="fit">hwani0814@korea.ac.kr</span></a>
-    <ul class="elsewhere label">
+  <section id="contact">
+    <p class="eyebrow"><span class="ring" style="--c: var(--gamboge)" aria-hidden="true"></span>Get in touch</p>
+    <h2>Contact</h2>
+    <a class="mail" href="mailto:hwani0814@korea.ac.kr">hwani0814@korea.ac.kr</a>
+    <ul class="elsewhere">
       <li><a href="https://scholar.google.com/citations?user=zFxC22gAAAAJ&amp;hl=en">Google Scholar</a></li>
       <!-- <li><a href="https://github.com/USERNAME">GitHub</a></li> -->
       <!-- <li><a href="https://orcid.org/XXXX-XXXX-XXXX-XXXX">ORCID</a></li> -->
-      <li>Korea University, Seoul</li>
     </ul>
+    <p class="addr">Korea University, Seoul</p>
   </section>
+
 </main>
 
 <footer>
   <div class="inner">
-    <p>The plate at the top shows the Hopf fibration. Write a unit quaternion as <i class="m">q</i> = <i class="m">z</i>₁ + <i class="m">z</i>₂<i class="m">j</i> with |<i class="m">z</i>₁|² + |<i class="m">z</i>₂|² = 1; its fibre is the circle {<i class="m">e</i><sup><i class="m">iθ</i></sup><i class="m">q</i>}. Base points on three latitudes of <i class="m">S</i>² give three nested tori of circles, drawn after stereographic projection to ℝ³.</p>
-    <p class="label">© <span id="yr">2026</span> JeongHwan Lee</p>
+    <p class="colophon">The drawing at the top: write a unit quaternion as <i class="m">q</i> = <i class="m">z</i>₁ + <i class="m">z</i>₂<i class="m">j</i> with |<i class="m">z</i>₁|² + |<i class="m">z</i>₂|² = 1. Its fibre is the circle {<i class="m">e</i><sup><i class="m">iθ</i></sup><i class="m">q</i>}. Base points on three latitudes of <i class="m">S</i>² give three nested tori of such circles, coloured by longitude.</p>
+    <p>© <span id="yr">2026</span> JeongHwan Lee</p>
   </div>
 </footer>
 
@@ -344,62 +340,61 @@
   "use strict";
   document.getElementById("yr").textContent = new Date().getFullYear();
 
-  /* ---------- fit display type to its container width ---------- */
-  const fits = [...document.querySelectorAll(".name, .mail")];
-  function fitText() {
-    fits.forEach((el) => {
-      const inner = el.querySelector(".fit");
-      const avail = el.clientWidth;
-      el.style.fontSize = "100px";
-      const w = inner.getBoundingClientRect().width;
-      if (w > 0) el.style.fontSize = Math.floor((100 * avail / w) * 0.995 * 100) / 100 + "px";
-    });
-  }
-  fitText();
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitText);
-  window.addEventListener("resize", fitText);
-
-  /* ---------- Hopf fibration, drawn in black on the plate ---------- */
+  /* ---------- Hopf fibration ---------- */
   const cv = document.getElementById("hopf");
   const ctx = cv.getContext("2d");
-  const box = cv.parentElement;
+  const hero = cv.parentElement;
   const still = matchMedia("(prefers-reduced-motion: reduce)");
 
-  // fibre over (eta, phi): z1 = e^{i(t+phi)} sin(eta), z2 = e^{it} cos(eta)
+  // pigments: indigo → viridian → rose madder → gamboge → indigo
+  const pig = [[59, 74, 156], [47, 125, 109], [196, 80, 106], [224, 169, 48], [59, 74, 156]];
+  const pigment = (u) => {
+    const x = u * (pig.length - 1), i = Math.floor(x), f = x - i, a = pig[i], b = pig[Math.min(i + 1, pig.length - 1)];
+    return a.map((c, k) => Math.round(c + (b[k] - c) * f));
+  };
+
+  // a fibre is fixed by (eta, phi): z1 = e^{i(t+phi)} sin(eta), z2 = e^{it} cos(eta)
   const rings = [];
   [0.78, 1.02, 1.26].forEach((eta, li) => {
     const m = [20, 26, 20][li];
-    for (let k = 0; k < m; k++) rings.push({ eta, phi: (2 * Math.PI * k) / m, li });
+    for (let k = 0; k < m; k++) rings.push({ eta, phi: (2 * Math.PI * k) / m, u: k / m, li });
   });
 
-  let W = 0, H = 0, dpr = 1, running = false, visible = true;
-  let tx = 0, ty = 0, px = 0, py = 0;
-  const t0 = performance.now(), N = 128;
-
+  let W = 0, H = 0, dpr = 1;
   function resize() {
     dpr = Math.min(window.devicePixelRatio || 1, 2);
-    W = box.clientWidth; H = box.clientHeight;
+    W = hero.clientWidth; H = hero.clientHeight;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
-    if (!running) draw(performance.now());
+    if (still.matches || !running) draw(performance.now());
   }
+
+  let tx = 0, ty = 0, px = 0, py = 0; // pointer parallax (target, eased)
+  const t0 = performance.now();
+  const N = 120;
 
   function draw(now) {
     const t = still.matches ? 4 : (now - t0) / 1000 + 4;
-    px += (tx - px) * 0.05; py += (ty - py) * 0.05;
+    px += (tx - px) * 0.04; py += (ty - py) * 0.04;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = "multiply";
 
-    const cx = W * 0.47, cy = H * 0.5, sc = Math.min(W, H) * 0.2;
-    const a4 = 0.35 * Math.sin(t * 0.07);
-    const ry = t * 0.11 + px * 0.7, rx = 0.55 + py * 0.4;
+    const wide = W > 900;
+    const cx = wide ? W * 0.64 : W * 0.5;
+    const cy = wide ? H * 0.56 : H * 0.7;
+    const sc = Math.min(W, H) * (wide ? 0.23 : 0.24);
+    const a4 = 0.35 * Math.sin(t * 0.07);           // rotation of S^3 in the (x1, y2)-plane
+    const ry = t * 0.11 + px * 0.6, rx = 0.55 + py * 0.35;
     const ca = Math.cos(a4), sa = Math.sin(a4), cyw = Math.cos(ry), syw = Math.sin(ry), cxr = Math.cos(rx), sxr = Math.sin(rx);
     const reveal = still.matches ? Infinity : (now - t0) / 1000;
 
     rings.forEach((r, idx) => {
-      const p = Math.max(0, Math.min(1, (reveal - idx * 0.016) / 1.0));
+      // load sequence: rings draw themselves in, staggered
+      const p = Math.max(0, Math.min(1, (reveal - idx * 0.018) / 1.1));
       if (p === 0) return;
-      ctx.strokeStyle = `rgba(0,0,0,${0.62 - r.li * 0.14})`;
-      ctx.lineWidth = 1.25 - r.li * 0.2;
+      const [cr, cg, cb] = pigment(r.u);
+      ctx.strokeStyle = `rgba(${cr},${cg},${cb},${0.5 - r.li * 0.08})`;
+      ctx.lineWidth = 1.3 + (2 - r.li) * 0.35;
       ctx.beginPath();
       const last = Math.round(N * (1 - Math.pow(1 - p, 3)));
       let started = false;
@@ -407,8 +402,8 @@
         const th = (2 * Math.PI * s) / N;
         let x1 = Math.sin(r.eta) * Math.cos(th + r.phi), y1 = Math.sin(r.eta) * Math.sin(th + r.phi);
         let x2 = Math.cos(r.eta) * Math.cos(th), y2 = Math.cos(r.eta) * Math.sin(th);
-        [x1, y2] = [ca * x1 - sa * y2, sa * x1 + ca * y2];      // rotation of S^3
-        const d = 1 - y2;                                        // stereographic projection
+        [x1, y2] = [ca * x1 - sa * y2, sa * x1 + ca * y2];
+        const d = 1 - y2;                              // stereographic projection from (0,0,0,1)
         if (d < 0.02) { started = false; continue; }
         let X = x1 / d, Y = y1 / d, Z = x2 / d;
         [X, Z] = [cyw * X + syw * Z, -syw * X + cyw * Z];
@@ -419,8 +414,10 @@
       }
       ctx.stroke();
     });
+    ctx.globalCompositeOperation = "source-over";
   }
 
+  let running = false, visible = true;
   function loop(now) {
     if (!visible || still.matches) { running = false; return; }
     draw(now);
@@ -428,8 +425,8 @@
   }
   function start() { if (!running && visible && !still.matches) { running = true; requestAnimationFrame(loop); } }
 
-  new IntersectionObserver((e) => { visible = e[0].isIntersecting; start(); }).observe(box);
-  new ResizeObserver(resize).observe(box);
+  new IntersectionObserver((entries) => { visible = entries[0].isIntersecting; start(); }).observe(hero);
+  window.addEventListener("resize", resize);
   window.addEventListener("pointermove", (e) => {
     if (e.pointerType !== "mouse") return;
     tx = e.clientX / window.innerWidth - 0.5; ty = e.clientY / window.innerHeight - 0.5;
@@ -438,17 +435,16 @@
   resize();
   start();
 
-  /* ---------- filters ---------- */
+  /* ---------- paper filter ---------- */
   const buttons = [...document.querySelectorAll(".filters button")];
-  const tiles = [...document.querySelectorAll(".tile")];
-  function applyFilter(topic) {
-    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.topic === topic)));
-    tiles.forEach((li) => { li.hidden = topic !== "all" && !li.dataset.topics.split(" ").includes(topic); });
-  }
-  buttons.forEach((b) => b.addEventListener("click", () => applyFilter(b.dataset.topic)));
-  document.querySelectorAll(".field").forEach((f) => f.addEventListener("click", () => {
-    applyFilter(f.dataset.topic);
-    document.getElementById("papers").scrollIntoView({ behavior: still.matches ? "auto" : "smooth" });
+  const pubs = [...document.querySelectorAll(".pub")];
+  const groups = [...document.querySelectorAll(".year-group")];
+  buttons.forEach((btn) => btn.addEventListener("click", () => {
+    const on = btn.getAttribute("aria-pressed") !== "true";
+    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn && on)));
+    const topic = on ? btn.dataset.topic : null;
+    pubs.forEach((li) => { li.hidden = topic !== null && !li.dataset.topics.split(" ").includes(topic); });
+    groups.forEach((g) => { g.hidden = g.querySelectorAll(".pub:not([hidden])").length === 0; });
   }));
 })();
 </script>

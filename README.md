@@ -22,42 +22,34 @@ Then open <http://localhost:8000>.
 
 ## Editing
 
-Everything is in `index.html`, in source order: `<style>`, then the page, then
-one `<script>`. The parts you will touch:
+Everything is in `index.html`: `<style>`, then the page, then one `<script>`.
 
 | What | Where |
 | ---- | ----- |
-| Intro sentence | `<p class="statement">` |
-| Field / Affiliation / Topics | `<dl class="facts">` |
-| Research areas | `<ul class="fields">` — `data-topic` ties a card to the paper filter |
-| Papers | `<ol class="grid">` — one `<li class="tile">` each |
-| Talks | `<ol class="rows">` — a commented-out template sits above the placeholder row |
+| Intro sentence | `<p class="statement">` in `#about` |
+| Research areas | `<ul class="interests">` |
+| Papers | `<div class="year-group">` per year, one `<li class="pub">` each |
+| Talks | `<ol class="talks">` — a commented-out template sits above the placeholder |
 | Links | `<ul class="elsewhere">` — GitHub and ORCID are commented out |
 
-**Adding a paper.** Copy a `<li class="tile">` block. `data-topics` takes one or
-more of `isogeny`, `lattice`, `impl` (space separated) and drives the filter
-buttons. Add `class="tile feature"` to make it span two columns with the large
-venue type. Then update the three counts by hand: `All (7)` in the filters, the
-`7` in the "View papers" button, and the per-area counts in the research cards.
+**Adding a paper.** Copy a `<li class="pub">`. `data-topics` takes one or more of
+`isogeny`, `lattice`, `impl` and drives the filter buttons; the coloured dots in
+`.meta` are set by hand with `--c: var(--viridian|--indigo|--madder)`. If the
+year has no group yet, copy a whole `<div class="year-group">`.
 
-**Only list public work.** Every paper on the page links to a public ePrint,
-TCHES or Springer page. Work that is not public yet lives in
-`publications.private.js`, which is gitignored and never deployed — `check.sh`
-fails if any of it reaches `index.html`.
+**Only list public work.** Every paper links to a public ePrint, TCHES or
+Springer page. Anything not public yet stays in `publications.private.js`, which
+is gitignored — `check.sh` fails if it reaches `index.html`.
 
 ## The plate
 
-The grey panel is the Hopf fibration. A unit quaternion `q = z₁ + z₂j` has fibre
+The hero is the Hopf fibration. A unit quaternion `q = z₁ + z₂j` has fibre
 `{e^{iθ}q}`, a circle in S³; base points on three latitudes of S² give three
-nested tori, drawn after stereographic projection to ℝ³.
+nested tori, stereographically projected and coloured by longitude through an
+indigo → viridian → madder → gamboge ramp.
 
-The drawing is exactly as you authored it. If you ever want to tune it, the two
-numbers that matter are both in `draw()`: `a4 = 0.35 * Math.sin(t * 0.07)` is the
-rotation of S³, and `if (d < 0.02)` is how close to the projection pole a point
-may get before the stroke breaks.
-
-It honours `prefers-reduced-motion`: a single static frame, no animation loop.
-The loop also stops when the panel scrolls out of view.
+It honours `prefers-reduced-motion` (one static frame, no loop) and stops
+animating when the hero scrolls out of view.
 
 ## Before publishing
 
