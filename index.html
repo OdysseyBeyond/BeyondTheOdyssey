@@ -146,6 +146,16 @@
   .interests p { margin: 0; color: var(--soft); font-size: 17px; line-height: 1.55; }
   @media (max-width: 860px) { .interests { grid-template-columns: minmax(0, 1fr); } }
 
+  .carmina {
+    font-weight: 300; font-style: italic;
+    font-size: clamp(16.5px, 1.25vw, 19px); line-height: 1.8; color: var(--soft);
+    max-width: 60ch; text-wrap: pretty;
+    margin: clamp(44px, 7vh, 72px) 0 0;
+    padding-left: clamp(18px, 2.2vw, 34px);
+    border-left: 1px solid var(--rule);
+  }
+  .carmina .roman { font-style: normal; color: var(--ink); }
+
   /* publications */
   .filters { display: flex; flex-wrap: wrap; gap: 10px 26px; margin: -18px 0 44px; }
   .filters button {
@@ -204,7 +214,7 @@
 
   /* contact */
   .mail {
-    font-family: var(--display); font-size: clamp(30px, 5.4vw, 72px); line-height: 1.1; letter-spacing: 0.02em;
+    font-family: var(--display); font-size: clamp(24px, 3.8vw, 50px); line-height: 1.15; letter-spacing: 0.02em;
     overflow-wrap: anywhere; display: inline-block;
     background-image: linear-gradient(var(--madder), var(--madder)); background-size: 100% 1px; background-repeat: no-repeat; background-position: 0 96%;
   }
@@ -252,26 +262,29 @@
     <p class="statement">Post-quantum schemes are proved secure on paper and then have to run on a chip. I work on both ends — the arithmetic of isogeny- and lattice-based constructions, and the attacks that recover keys from how that arithmetic executes.</p>
     <ul class="interests">
       <li>
-        <h3><span class="dot" style="--c: var(--viridian)" aria-hidden="true"></span>Isogenies &amp; quaternions</h3>
-        <p>SQIsign, quaternion arithmetic with explicit worst-case bounds, terSIDH.</p>
-      </li>
-      <li>
         <h3><span class="dot" style="--c: var(--indigo)" aria-hidden="true"></span>Lattices</h3>
         <p>LWE with sparse secrets and side information, fully homomorphic encryption, threshold FHE.</p>
+      </li>
+      <li>
+        <h3><span class="dot" style="--c: var(--viridian)" aria-hidden="true"></span>Isogenies &amp; quaternions</h3>
+        <p>SQIsign, quaternion arithmetic with explicit worst-case bounds, terSIDH.</p>
       </li>
       <li>
         <h3><span class="dot" style="--c: var(--madder)" aria-hidden="true"></span>Implementation security</h3>
         <p>Fault attacks, simple power analysis, masking, constant-time implementation.</p>
       </li>
     </ul>
+    <p class="carmina">A living anthology of studies and reflections — my voice woven with the wisdom of others, sung together as <span class="roman">Carmina Mea</span>.<br>
+    Not mine alone, but shaped by countless minds and timeless words;<br>
+    a work of learning as love, and love as the pursuit of beauty, gathered on this path of thought and art.</p>
   </section>
 
   <section id="papers">
     <p class="eyebrow"><span class="ring" style="--c: var(--viridian)" aria-hidden="true"></span>Publications &amp; preprints</p>
     <h2>Papers</h2>
     <div class="filters" role="group" aria-label="Filter papers by topic">
-      <button type="button" id="f-isogeny" data-topic="isogeny" aria-pressed="false"><span class="dot" style="--c: var(--viridian)"></span>Isogenies</button>
       <button type="button" id="f-lattice" data-topic="lattice" aria-pressed="false"><span class="dot" style="--c: var(--indigo)"></span>Lattices</button>
+      <button type="button" id="f-isogeny" data-topic="isogeny" aria-pressed="false"><span class="dot" style="--c: var(--viridian)"></span>Isogenies</button>
       <button type="button" id="f-impl" data-topic="impl" aria-pressed="false"><span class="dot" style="--c: var(--madder)"></span>Implementation security</button>
     </div>
 
